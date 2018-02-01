@@ -2,6 +2,7 @@ $(document).ready(function($){
 var posicao = 1;
 var turn = 1;
 var selecionado = false;
+
 const random = Math.floor((Math.random() * 9) + 1);
 
 const soundList = {

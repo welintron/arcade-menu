@@ -1,0 +1,81 @@
+<html>
+    <head>
+      <meta charset="UTF-8">
+      <title>Mortal Kombat II Menu</title>
+      <link rel="stylesheet" href="./build/bootstrap.min.css">
+      <link rel="stylesheet" href="./build/jquery-ui.min.css">
+      <script> window.$ = window.jQuery = require("./build/jquery.min.js");
+       require("./build/jquery-ui.min.js");
+       require("./build/bootstrap.min.js");
+      </script>
+  
+
+      
+      <style>
+        .bordaPiscante { width: 290px;height: 65px;border: solid 5px #24C72A;}
+	      .selecionado {border: solid 5px #646464 !important; background-color: #0000FF !important; opacity: 0.2 !important;}
+        #element1 {
+          position: absolute;
+          top: 186px;
+          left: 56px;        
+        }
+        #element2 {
+          position: absolute;
+          top: 287px;
+          left: 56px;        
+        }
+
+        #element3 {
+          position: absolute;
+          top: 186px;
+          left: 378px;        
+        }
+
+        #element4 {
+          position: absolute;
+          top: 287px;
+          left: 378px;        
+        }
+
+
+        body {
+            /* background-image: url(mk2bg.png); */
+            background-repeat: no-repeat;
+            background-color: black;
+            -moz-background-size: 100% 100%;
+            -webkit-background-size: 100% 100%;
+            background-size: 100% 100%;
+        }
+
+
+      </style>  
+       
+    </head>
+    <body>
+
+    <div class="container">
+      <div class="row">
+          <div class="col-md-12">
+            <div tabindex="0" id="element1" class="bordaPiscante"></div>
+            <div tabindex="1" id="element2" ></div>
+            <div tabindex="2" id="element3" ></div>
+            <div tabindex="3" id="element4" ></div>
+          </div>  
+      </div>  
+
+    </div>
+      <script type= "text/javascript" src="./build/jquery.transit.min.js"></script>
+      <script type= "text/javascript" src="./build/howler.min.js"></script>
+      <script type= "text/javascript" src="./build/menu.js"></script>
+      <script>
+          document.addEventListener("keydown", function (e) {
+            if (e.which === 123) {
+              require('remote').getCurrentWindow().toggleDevTools();
+            } else if (e.which === 116) {
+              location.reload();
+            }
+          });
+      </script>
+
+    </body>
+  </html>

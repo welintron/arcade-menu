@@ -2,17 +2,12 @@ $(document).ready(function($){
 var posicao = 1;
 var turn = 1;
 var selecionado = false;
-const soundListA = [
-  '0laugh1.wav',
-  '0laugh2.wav',
-  '0laugh3.wav',
+
+const soundList = [
   '1dontmake.mp3',
   '1isthatyourbest.mp3',
   '1weakpathetic.mp3',
   '1youarenothing.mp3',
-];
-
-const soundListB = [
   '0laugh1.wav',
   '0laugh2.wav',
   '0laugh3.wav',
@@ -25,8 +20,16 @@ const soundListB = [
   '2welldone.wav',
   '2youwilldie.mp3',
 ];
+ 
+var shaokahnSound = new Howl({ src: ['./build/wav/' + soundList[Math.floor(Math.random() * 6) + 1]]});
 
-var shaokahnSound = new Howl({ src: ['./build/wav/' + soundListA[Math.floor(Math.random()*soundListA.length) + 1]]});
+//testador
+//for (i=0; i < 100; i++ ) {
+ // Math.floor(Math.random() * (max - min + 1)) + min;
+ // console.log(soundList[Math.floor(Math.random() * 6) + 1]);
+ //   console.log(soundList[Math.floor(Math.random() * 11 ) + 4]);
+//}
+
 
 
 const selection = new Howl({ src: ['./build/wav/selection.wav'] });
@@ -105,7 +108,8 @@ const remote = require('electron').remote;
         } else if (e.which === 27 || e.which === 113 || e.which === 13 
         || e.which === 9 || e.which === 53 || e.which === 80) {
           selected.play();
-          shaokahnSound = new Howl({ src: ['./build/wav/' + soundListB[Math.floor(Math.random()*soundListB.length) + 1]]});
+        //  Math.floor(Math.random() * (max - min + 1)) + min;
+          shaokahnSound = new Howl({ src: ['./build/wav/' + soundList[Math.floor(Math.random() * 11 ) + 4]]});
           animateSelected2();        
           delay(function(){
             runStartupScript(); 
@@ -132,7 +136,8 @@ const remote = require('electron').remote;
             posicao = 1;
         } else if (e.which === 49) {
           selected.play();
-          shaokahnSound = new Howl({ src: ['./build/wav/' + soundListB[Math.floor(Math.random()*soundListB.length) + 1]]});
+        //  Math.floor(Math.random() * (max - min + 1)) + min;
+        shaokahnSound = new Howl({ src: ['./build/wav/' + soundList[Math.floor(Math.random() * 11 ) + 4]]});
           animateSelected2();         
           delay(function(){
             abreHyperspin(); 
@@ -248,7 +253,7 @@ function animateSelected2() {
   function findExplorerProcess() {
     const find = require('find-process');
 
-    find('name', 'explorer')
+    find('name', 'Explorer.EXE')
       .then(function (list) {
         if (list.length === 0) {
           abreExplorer();

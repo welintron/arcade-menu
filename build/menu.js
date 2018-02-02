@@ -2,22 +2,33 @@ $(document).ready(function($){
 var posicao = 1;
 var turn = 1;
 var selecionado = false;
+const soundListA = [
+  '0laugh1.wav',
+  '0laugh2.wav',
+  '0laugh3.wav',
+  '1dontmake.mp3',
+  '1isthatyourbest.mp3',
+  '1weakpathetic.mp3',
+  '1youarenothing.mp3',
+];
 
-const random = Math.floor((Math.random() * 9) + 1);
+const soundListB = [
+  '0laugh1.wav',
+  '0laugh2.wav',
+  '0laugh3.wav',
+  '2excellent.wav',
+  '2excellent2.wav',
+  '2feelthewrath.mp3',
+  '2outstanding.wav',
+  '2superb.wav',
+  '2superb2.mp3',
+  '2welldone.wav',
+  '2youwilldie.mp3',
+];
 
-const soundList = {
-  1: '1.wav',
-  2: '2.wav',
-  3: '3.wav',
-  4: '4.wav',
-  5: '5.wav',
-  6: '6.wav',
-  7: '7.wav',
-  8: '8.wav',
-  9: '8.wav',
-};
+var shaokahnSound = new Howl({ src: ['./build/wav/' + soundListA[Math.floor(Math.random()*soundListA.length) + 1]]});
 
-const shaokahnSound = new Howl({ src: ['./build/wav/' + soundList[random]]});
+
 const selection = new Howl({ src: ['./build/wav/selection.wav'] });
 const selected = new Howl({ src: ['./build/wav/selected.wav'] });
 const music = new Howl({ 
@@ -47,7 +58,7 @@ const remote = require('electron').remote;
             posicao = 3;
         } else if (e.which === 49) {
             selected.play();
-            animateSelected2();  
+            animateSelected2();
             delay(function(){
                 const { exec } = require('child_process');
                 exec('shutdown -s -f -t 00', (error, stdout, stderr) => {
@@ -77,7 +88,7 @@ const remote = require('electron').remote;
             posicao = 4;
         } else if (e.which === 49) {
             selected.play();
-            animateSelected2();  
+            animateSelected2(); 
             delay(function(){
                 const { exec } = require('child_process');
                 exec('shutdown -r -f -t 00', (error, stdout, stderr) => {
@@ -93,8 +104,8 @@ const remote = require('electron').remote;
     
         } else if (e.which === 27 || e.which === 113 || e.which === 13 
         || e.which === 9 || e.which === 53 || e.which === 80) {
-
           selected.play();
+          shaokahnSound = new Howl({ src: ['./build/wav/' + soundListB[Math.floor(Math.random()*soundListB.length) + 1]]});
           animateSelected2();        
           delay(function(){
             runStartupScript(); 
@@ -121,7 +132,8 @@ const remote = require('electron').remote;
             posicao = 1;
         } else if (e.which === 49) {
           selected.play();
-          animateSelected2();        
+          shaokahnSound = new Howl({ src: ['./build/wav/' + soundListB[Math.floor(Math.random()*soundListB.length) + 1]]});
+          animateSelected2();         
           delay(function(){
             abreHyperspin(); 
             delay(function(){

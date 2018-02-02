@@ -288,17 +288,8 @@ $(document).ready(function ($) {
   }
 
 
-
-
   //$("#element").focus();
   animateDivers();
-  //animateSelected();
-  //$("#element1").addClass( "selecionando" );
-
-
-
-
-
 
 });
 

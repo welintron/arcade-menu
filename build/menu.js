@@ -21,14 +21,15 @@ const soundList = [
   '2youwilldie.mp3',
 ];
  
-var shaokahnSound = new Howl({ src: ['./build/wav/' + soundList[Math.floor(Math.random() * 6) + 1]]});
-
 //testador
-//for (i=0; i < 100; i++ ) {
- // Math.floor(Math.random() * (max - min + 1)) + min;
- // console.log(soundList[Math.floor(Math.random() * 6) + 1]);
- //   console.log(soundList[Math.floor(Math.random() * 11 ) + 4]);
-//}
+
+// for (i=0; i < 100; i++ ) {
+//  //Math.floor(Math.random() * (max - min + 1)) + min;
+// // console.log(soundList[Math.floor(Math.random() * 7)]); //option for poweroff/reboot/windows
+//  console.log(soundList[Math.floor(Math.random() * 11 ) + 4]); //option for hyperspin/restart
+// }
+
+var shaokahnSound = new Howl({ src: ['./build/wav/' + soundList[Math.floor(Math.random() * 7)]]});
 
 
 
@@ -253,7 +254,7 @@ function animateSelected2() {
   function findExplorerProcess() {
     const find = require('find-process');
 
-    find('name', 'Explorer.EXE')
+    find('name', 'explorer')
       .then(function (list) {
         if (list.length === 0) {
           abreExplorer();

@@ -18,7 +18,7 @@ $(document).ready(function ($) {
     '2superb.wav',
     '2superb2.mp3',
     '2welldone.wav',
-    '2youwilldie.mp3',
+    '2youwilldie.mp3'
   ];
 
   //testador
@@ -207,7 +207,7 @@ $(document).ready(function ($) {
   function abreHyperspin() {
     const { exec } = require('child_process');
     exec('c:/Arcade/FE/HyperSpin/HyperSpin.exe', (error, stdout, stderr) => {
-      if (error.code != 1) {
+      if (error.code !== 1) {
         console.error(`exec error: ${error}`);
         return;
       }
@@ -251,7 +251,7 @@ $(document).ready(function ($) {
     var executablePath = 'C:/Windows/Explorer.EXE';
 
     child(executablePath, function (err, data) {
-      if (err.code != 1) {
+      if (err.code !== 1) {
         console.error(err);
         return;
       }

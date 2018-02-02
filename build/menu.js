@@ -287,6 +287,13 @@ $(document).ready(function ($) {
 
   }
 
+  $('#dan').click(function() {
+    $('.toasty').transition({ x: '-310px' }).transition({ x: '310px', duration: 1000, delay: 500 });
+  });
+    
+
+  
+
 
   //$("#element").focus();
   animateDivers();

@@ -40,10 +40,22 @@
 
         body {
             background-image: url(mk2bg.png); 
+            /* background-color: black; */
             background-repeat: no-repeat;
             -moz-background-size: 100% 100%;
             -webkit-background-size: 100% 100%;
             background-size: 100% 100%;
+        }
+
+        .toasty {
+          position: fixed;
+          bottom: 0;
+          background-image: url("toasty.png");
+          background-repeat: no-repeat;
+          width: 256px;
+          height: 256px;
+          left: 721px;  
+
         }
 
 
@@ -59,6 +71,8 @@
             <div tabindex="1" id="element2" ></div>
             <div tabindex="2" id="element3" ></div>
             <div tabindex="3" id="element4" ></div>
+            <div class="toasty"></div>
+            <button type="button" id="dan" class="btn btn-primary btn-sm">Toasty!</button>
           </div>  
       </div>  
 

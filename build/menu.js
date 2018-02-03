@@ -1,7 +1,9 @@
 $(document).ready(function ($) {
+  
   var posicao = 1;
   var turn = 1;
   var selecionado = false;
+  var operacao = 0;
 
   const soundList = [
     '1dontmake.mp3',
@@ -11,6 +13,7 @@ $(document).ready(function ($) {
     '0laugh1.wav',
     '0laugh2.wav',
     '0laugh3.wav',
+    'toasty.mp3',
     '2excellent.wav',
     '2excellent2.wav',
     '2feelthewrath.mp3',
@@ -25,13 +28,15 @@ $(document).ready(function ($) {
 
   // for (i=0; i < 100; i++ ) {
   //  //Math.floor(Math.random() * (max - min + 1)) + min;
-  // // console.log(soundList[Math.floor(Math.random() * 7)]); //option for poweroff/reboot/windows
-  //  console.log(soundList[Math.floor(Math.random() * 11 ) + 4]); //option for hyperspin/restart
+  //  //console.log(soundList[Math.floor(Math.random() * 8)]); //option for poweroff/reboot/windows
+  //  console.log(soundList[Math.floor(Math.random() * 12 ) + 4]); //option for hyperspin/restart
   // }
-
-  var shaokahnSound = new Howl({ src: ['./build/wav/' + soundList[Math.floor(Math.random() * 7)]] });
+  $("#toasty").hide();
+  $("#dan").hide();
+  var shaokahnSound = new Howl({ src: ['./build/wav/' + soundList[Math.floor(Math.random() * 8)]] });
   const selection = new Howl({ src: ['./build/wav/selection.wav'] });
   const selected = new Howl({ src: ['./build/wav/selected.wav'] });
+  const toasty = new Howl({ src: ['./build/wav/toasty.mp3'] });
   const music = new Howl({
     src: ['./build/wav/mk2_wasteland.wav'],
     autoplay: true,
@@ -39,6 +44,65 @@ $(document).ready(function ($) {
     volume: 0.4
   });
 
+
+ function goPowerOff(){
+  delay(function () {
+    const { exec } = require('child_process');
+    exec('shutdown -s -f -t 00', (error, stdout, stderr) => {
+      if (error) {
+        console.error(`exec error: ${error}`);
+        return;
+      }
+      console.log(`stdout: ${stdout}`);
+      console.log(`stderr: ${stderr}`);
+    });
+  }, 4000);
+  }
+
+  function goReboot(){
+    delay(function () {
+      const { exec } = require('child_process');
+      exec('shutdown -r -f -t 00', (error, stdout, stderr) => {
+        if (error) {
+          console.error(`exec error: ${error}`);
+          return;
+        }
+        console.log(`stdout: ${stdout}`);
+        console.log(`stderr: ${stderr}`);
+      });
+    }, 4000);
+  }
+  
+  function goMK2(){
+    delay(function () {
+      findKillExplorerProcess();
+      runStartupScript();
+      delay(function () { 
+        remote.getCurrentWindow().close();
+      }, 2000);
+    }, 1000);
+  }
+
+  function goHyperspin(){
+    delay(function () {
+      abreHyperspin();
+      delay(function () {
+        remote.getCurrentWindow().close();
+      }, 4000);
+    }, 1000);
+  }
+
+  function goWindows(){
+    delay(function () {
+      try {
+        findOpenExplorerProcess();
+      } finally {
+        delay(function () {
+          remote.getCurrentWindow().close();
+        }, 3000);
+      }
+    }, 1000);
+ }
 
   const remote = require('electron').remote;
   document.addEventListener("keydown", function (e) {
@@ -58,19 +122,9 @@ $(document).ready(function ($) {
         //  $("#element3").focus();
         posicao = 3;
       } else if (e.which === 49) {
+        operacao = 1;
         selected.play();
         animateSelected2();
-        delay(function () {
-          const { exec } = require('child_process');
-          exec('shutdown -s -f -t 00', (error, stdout, stderr) => {
-            if (error) {
-              console.error(`exec error: ${error}`);
-              return;
-            }
-            console.log(`stdout: ${stdout}`);
-            console.log(`stderr: ${stderr}`);
-          });
-        }, 4000);
       }
 
       //} else if($("#element2").is(':focus')) {
@@ -87,35 +141,19 @@ $(document).ready(function ($) {
         $("#element4").addClass("bordaPiscante");
         //   $("#element4").focus();
         posicao = 4;
-      } else if (e.which === 49) {
-        selected.play();
-        animateSelected2();
-        delay(function () {
-          const { exec } = require('child_process');
-          exec('shutdown -r -f -t 00', (error, stdout, stderr) => {
-            if (error) {
-              console.error(`exec error: ${error}`);
-              return;
-            }
-            console.log(`stdout: ${stdout}`);
-            console.log(`stderr: ${stderr}`);
-          });
-        }, 4000);
-
-
       } else if (e.which === 27 || e.which === 113 || e.which === 13
         || e.which === 9 || e.which === 53 || e.which === 80) {
+        operacao = 2;  
+        selected.play();
+        animateSelected2();
+
+      } else if (e.which === 49) {
+        operacao = 3;
         selected.play();
         //  Math.floor(Math.random() * (max - min + 1)) + min;
         shaokahnSound = new Howl({ src: ['./build/wav/' + soundList[Math.floor(Math.random() * 11) + 4]] });
         animateSelected2();
-        delay(function () {
-          runStartupScript();
-          findKillExplorerProcess();
-          delay(function () { 
-            remote.getCurrentWindow().close();
-          }, 2000);
-        }, 1000);
+
 
       }
 
@@ -134,16 +172,11 @@ $(document).ready(function ($) {
         // $("#element").focus();
         posicao = 1;
       } else if (e.which === 49) {
+        operacao = 4;
         selected.play();
         //  Math.floor(Math.random() * (max - min + 1)) + min;
         shaokahnSound = new Howl({ src: ['./build/wav/' + soundList[Math.floor(Math.random() * 11) + 4]] });
         animateSelected2();
-        delay(function () {
-          abreHyperspin();
-          delay(function () {
-            remote.getCurrentWindow().close();
-          }, 4000);
-        }, 1000);
       }
 
 
@@ -162,22 +195,37 @@ $(document).ready(function ($) {
         //   $("#element2").focus();
         posicao = 2;
       } else if (e.which === 49) {
+        operacao = 5;
         selected.play();
         animateSelected2();
-        delay(function () {
-          try {
-            findOpenExplorerProcess();
-          } finally {
-            delay(function () {
-              remote.getCurrentWindow().close();
-            }, 3000);
-          }
-        }, 1000);
+
 
       }
     }
 
   });
+
+
+  function checkSelection() {
+    switch (operacao) {
+      case 1:
+        goPowerOff();
+        break;
+      case 2:
+        goReboot();
+        break;
+      case 3:
+        goMK2();
+        break;
+      case 4:
+        goHyperspin();
+        break;
+      case 5:
+        goWindows();
+        break;
+  }
+
+  }
 
 
   function runStartupScript() {
@@ -195,7 +243,7 @@ $(document).ready(function ($) {
 
     const
       spawn = require('child_process').spawnSync,
-      vbs = spawn('cscript.exe', ['c:/slave.vbs', 'one']);
+      vbs = spawn('cscript.exe', ['c:/Arcade/Startup/autorun.vbs', 'one']);
 
     console.log(`stderr: ${vbs.stderr.toString()}`);
     console.log(`stdout: ${vbs.stdout.toString()}`);
@@ -241,7 +289,13 @@ $(document).ready(function ($) {
 
     } else {
       $('#element' + posicao).addClass("selecionado");
-      shaokahnSound.play();
+      if (shaokahnSound._src === './build/wav/toasty.mp3') {
+        startToasty();
+      } else {
+        shaokahnSound.play();
+        checkSelection();
+      }
+      
     }
 
   }
@@ -287,10 +341,30 @@ $(document).ready(function ($) {
 
   }
 
+  function startToasty() {
+    $("#toasty").show();
+    $('.toasty').transition({ x: '-150px' }).transition({ x: '150px', duration: 1000, delay: 500 });
+
+
+    delay(function () {
+      toasty.play(); 
+      delay(function () {
+        $("#toasty").hide();
+        checkSelection();
+      }, 1000);
+    }, 500);
+
+
+    
+
+    
+  }
+
   $('#dan').click(function() {
-    $('.toasty').transition({ x: '-310px' }).transition({ x: '310px', duration: 1000, delay: 500 });
+    startToasty();
   });
     
+
 
   
 

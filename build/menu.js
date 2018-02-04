@@ -50,9 +50,12 @@ const remote = require('electron').remote;
   const selected = new Howl({
     src: ['./build/wav/selected.wav']
   });
+
   const toasty = new Howl({
     src: ['./build/wav/toasty.mp3']
   });
+
+
   const music = new Howl({
     src: ['./build/wav/mk2_wasteland.wav'],
     autoplay: true,
@@ -130,11 +133,13 @@ const remote = require('electron').remote;
 
   document.addEventListener("keyup", function keyUp(e) {
     // reset status of the button 'released' == 'false'
+
     if (e.which == 70) {
         keys["downP2"] = false;
     } else if (e.which == 50) {
         keys["startP2"] = false;
     }
+
   });
 
   document.addEventListener("keydown", function keyDown(e) {
@@ -145,7 +150,9 @@ const remote = require('electron').remote;
       keys["startP2"] = true;
     }
     if (keys["downP2"] && keys["startP2"]) {
-      startToasty();  
+      document.removeEventListener('keydown', keyDown, false); 
+      startToasty(keyDown);
+      
     } else {
 
       //if($("#element").is(':focus')) {
@@ -426,14 +433,14 @@ const remote = require('electron').remote;
   }
 
 
-  function startToasty() {
-    $("#toasty").show();
+  function startToasty(keyDown) {
+     $("#toasty").show();
     $('.toasty').transition({
       x: '-150px'
     }).transition({
       x: '150px',
-      duration: 1000,
-      delay: 500
+      duration: 800,
+      delay: 300
     });
 
 
@@ -441,16 +448,17 @@ const remote = require('electron').remote;
       toasty.play();
       delay(function () {
         $("#toasty").hide();
-        checkSelection();
+        checkSelection(); 
+        document.addEventListener('keydown', keyDown, false);
       }, 1000);
-    }, 500);
-
+    }, 300);
 
 
 
 
   }
 
+ 
   $('#dan').click(function () {
     startToasty();
   });

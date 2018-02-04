@@ -2,6 +2,8 @@
 const electron = require('electron');
 const {app, BrowserWindow} = electron;
 
+
+
 global.sharedObject = {prop1: process.argv};
 
 
@@ -71,7 +73,7 @@ app.on('ready', function () {
 
   
   // Create the browser window.
-  mainWindow = new BrowserWindow({ width: 720, height: 480, show: false });
+  mainWindow = new BrowserWindow({ width: 720, height: 480, show: false, icon: 'mklogo.png.png', });
   mainWindow.setFullScreen(true);
   mainWindow.setMenu(null);
   // and load the index.html of the app.
@@ -83,7 +85,8 @@ app.on('ready', function () {
   });
 
   // Open the devtools.
-  // mainWindow.openDevTools();
+   mainWindow.openDevTools();
+
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
 

@@ -4,6 +4,12 @@ $(document).ready(function ($) {
   var turn = 1;
   var selecionado = false;
   var operacao = 0;
+  var keys = {
+    downP2: false,
+    startP2: false
+};
+
+const remote = require('electron').remote;
 
   const soundList = [
     '1dontmake.mp3',
@@ -33,10 +39,20 @@ $(document).ready(function ($) {
   // }
   $("#toasty").hide();
   $("#dan").hide();
-  var shaokahnSound = new Howl({ src: ['./build/wav/' + soundList[Math.floor(Math.random() * 8)]] });
-  const selection = new Howl({ src: ['./build/wav/selection.wav'] });
-  const selected = new Howl({ src: ['./build/wav/selected.wav'] });
-  const toasty = new Howl({ src: ['./build/wav/toasty.mp3'] });
+
+
+  var shaokahnSound = new Howl({
+    src: ['./build/wav/' + soundList[Math.floor(Math.random() * 8)]]
+  });
+  const selection = new Howl({
+    src: ['./build/wav/selection.wav']
+  });
+  const selected = new Howl({
+    src: ['./build/wav/selected.wav']
+  });
+  const toasty = new Howl({
+    src: ['./build/wav/toasty.mp3']
+  });
   const music = new Howl({
     src: ['./build/wav/mk2_wasteland.wav'],
     autoplay: true,
@@ -44,24 +60,29 @@ $(document).ready(function ($) {
     volume: 0.4
   });
 
+  
 
- function goPowerOff(){
-  delay(function () {
-    const { exec } = require('child_process');
-    exec('shutdown -s -f -t 00', (error, stdout, stderr) => {
-      if (error) {
-        console.error(`exec error: ${error}`);
-        return;
-      }
-      console.log(`stdout: ${stdout}`);
-      console.log(`stderr: ${stderr}`);
-    });
-  }, 4000);
+  function goPowerOff() {
+    delay(function () {
+      const {
+        exec
+      } = require('child_process');
+      exec('shutdown -s -f -t 00', (error, stdout, stderr) => {
+        if (error) {
+          console.error(`exec error: ${error}`);
+          return;
+        }
+        console.log(`stdout: ${stdout}`);
+        console.log(`stderr: ${stderr}`);
+      });
+    }, 4000);
   }
 
-  function goReboot(){
+  function goReboot() {
     delay(function () {
-      const { exec } = require('child_process');
+      const {
+        exec
+      } = require('child_process');
       exec('shutdown -r -f -t 00', (error, stdout, stderr) => {
         if (error) {
           console.error(`exec error: ${error}`);
@@ -72,18 +93,19 @@ $(document).ready(function ($) {
       });
     }, 4000);
   }
-  
-  function goMK2(){
+
+  function goMK2() {
     delay(function () {
+      //  $("body").addClass("blackBg");
       findKillExplorerProcess();
-      runStartupScript();
-      delay(function () { 
-        remote.getCurrentWindow().close();
+      delay(function () {
+        runStartupScript();
       }, 2000);
-    }, 1000);
+    }, 2000);
   }
 
-  function goHyperspin(){
+
+  function goHyperspin() {
     delay(function () {
       abreHyperspin();
       delay(function () {
@@ -92,7 +114,7 @@ $(document).ready(function ($) {
     }, 1000);
   }
 
-  function goWindows(){
+  function goWindows() {
     delay(function () {
       try {
         findOpenExplorerProcess();
@@ -102,104 +124,133 @@ $(document).ready(function ($) {
         }, 3000);
       }
     }, 1000);
- }
+  }
 
-  const remote = require('electron').remote;
-  document.addEventListener("keydown", function (e) {
+  
 
-    //if($("#element").is(':focus')) {
-    if (posicao === 1) {
-      if (e.which === 40) {
-        selection.play();
-        $("#element1").removeClass("bordaPiscante");
-        $("#element2").addClass("bordaPiscante");
-        // $("#element2").focus();
-        posicao = 2;
-      } else if (e.which === 39) {
-        selection.play();
-        $("#element1").removeClass("bordaPiscante");
-        $("#element3").addClass("bordaPiscante");
-        //  $("#element3").focus();
-        posicao = 3;
-      } else if (e.which === 49) {
-        operacao = 1;
-        selected.play();
-        animateSelected2();
-      }
+  document.addEventListener("keyup", function keyUp(e) {
+    // reset status of the button 'released' == 'false'
+    if (e.which == 70) {
+        keys["downP2"] = false;
+    } else if (e.which == 50) {
+        keys["startP2"] = false;
+    }
+  });
 
-      //} else if($("#element2").is(':focus')) {
-    } else if (posicao === 2) {
-      if (e.which === 38) {
-        selection.play();
-        $("#element2").removeClass("bordaPiscante");
-        $("#element1").addClass("bordaPiscante");
-        //  $("#element").focus();
-        posicao = 1;
-      } else if (e.which === 39) {
-        selection.play();
-        $("#element2").removeClass("bordaPiscante");
-        $("#element4").addClass("bordaPiscante");
-        //   $("#element4").focus();
-        posicao = 4;
-      } else if (e.which === 27 || e.which === 113 || e.which === 13
-        || e.which === 9 || e.which === 53 || e.which === 80) {
-        operacao = 2;  
-        selected.play();
-        animateSelected2();
+  document.addEventListener("keydown", function keyDown(e) {
 
-      } else if (e.which === 49) {
-        operacao = 3;
-        selected.play();
-        //  Math.floor(Math.random() * (max - min + 1)) + min;
-        shaokahnSound = new Howl({ src: ['./build/wav/' + soundList[Math.floor(Math.random() * 11) + 4]] });
-        animateSelected2();
+    if (e.which == 70) {
+      keys["downP2"] = true;
+    } else if (e.which == 50) {
+      keys["startP2"] = true;
+    }
+    if (keys["downP2"] && keys["startP2"]) {
+      startToasty();  
+    } else {
 
+      //if($("#element").is(':focus')) {
+      if (posicao === 1) {
+        if (e.which === 40) {
+          selection.play();
+          $("#element1").removeClass("bordaPiscante");
+          $("#element2").addClass("bordaPiscante");
+          // $("#element2").focus();
+          posicao = 2;
+        } else if (e.which === 39) {
+          selection.play();
+          $("#element1").removeClass("bordaPiscante");
+          $("#element3").addClass("bordaPiscante");
+          //  $("#element3").focus();
+          posicao = 3;
+        } else if (e.which === 49) {
+          document.removeEventListener('keydown', keyDown, false);
+          operacao = 1;
+          selected.play();
+          animateSelected2();
+        }
 
-      }
+        //} else if($("#element2").is(':focus')) {
+      } else if (posicao === 2) {
+        if (e.which === 38) {
+          selection.play();
+          $("#element2").removeClass("bordaPiscante");
+          $("#element1").addClass("bordaPiscante");
+          //  $("#element").focus();
+          posicao = 1;
+        } else if (e.which === 39) {
+          selection.play();
+          $("#element2").removeClass("bordaPiscante");
+          $("#element4").addClass("bordaPiscante");
+          //   $("#element4").focus();
+          posicao = 4;
+        } else if (e.which === 27 || e.which === 113 || e.which === 13 ||
+          e.which === 9 || e.which === 53 || e.which === 80) {
+          document.removeEventListener('keydown', keyDown, false);
+          operacao = 2;
+          selected.play();
+          animateSelected2();
 
-      //  } else if($("#element3").is(':focus')) {
-    } else if (posicao === 3) {
-      if (e.which === 40) {
-        selection.play();
-        $("#element3").removeClass("bordaPiscante");
-        $("#element4").addClass("bordaPiscante");
-        //  $("#element4").focus();
-        posicao = 4;
-      } else if (e.which === 37) {
-        selection.play();
-        $("#element3").removeClass("bordaPiscante");
-        $("#element1").addClass("bordaPiscante");
-        // $("#element").focus();
-        posicao = 1;
-      } else if (e.which === 49) {
-        operacao = 4;
-        selected.play();
-        //  Math.floor(Math.random() * (max - min + 1)) + min;
-        shaokahnSound = new Howl({ src: ['./build/wav/' + soundList[Math.floor(Math.random() * 11) + 4]] });
-        animateSelected2();
-      }
-
-
-      //  } else if($("#element4").is(':focus')) {
-    } else if (posicao === 4) {
-      if (e.which === 38) {
-        selection.play();
-        $("#element4").removeClass("bordaPiscante");
-        $("#element3").addClass("bordaPiscante");
-        //  $("#element3").focus();
-        posicao = 3;
-      } else if (e.which === 37) {
-        selection.play();
-        $("#element4").removeClass("bordaPiscante");
-        $("#element2").addClass("bordaPiscante");
-        //   $("#element2").focus();
-        posicao = 2;
-      } else if (e.which === 49) {
-        operacao = 5;
-        selected.play();
-        animateSelected2();
+        } else if (e.which === 49) {
+          document.removeEventListener('keydown', keyDown, false);
+          operacao = 3;
+          selected.play();
+          //  Math.floor(Math.random() * (max - min + 1)) + min;
+          shaokahnSound = new Howl({
+            src: ['./build/wav/' + soundList[Math.floor(Math.random() * 12) + 4]]
+          });
+          animateSelected2();
 
 
+        }
+
+        //  } else if($("#element3").is(':focus')) {
+      } else if (posicao === 3) {
+        if (e.which === 40) {
+          selection.play();
+          $("#element3").removeClass("bordaPiscante");
+          $("#element4").addClass("bordaPiscante");
+          //  $("#element4").focus();
+          posicao = 4;
+        } else if (e.which === 37) {
+          selection.play();
+          $("#element3").removeClass("bordaPiscante");
+          $("#element1").addClass("bordaPiscante");
+          // $("#element").focus();
+          posicao = 1;
+        } else if (e.which === 49) {
+          document.removeEventListener('keydown', keyDown, false);
+          operacao = 4;
+          selected.play();
+          //  Math.floor(Math.random() * (max - min + 1)) + min;
+          shaokahnSound = new Howl({
+            src: ['./build/wav/' + soundList[Math.floor(Math.random() * 12) + 4]]
+          });
+          animateSelected2();
+        }
+
+
+        //  } else if($("#element4").is(':focus')) {
+      } else if (posicao === 4) {
+        if (e.which === 38) {
+          selection.play();
+          $("#element4").removeClass("bordaPiscante");
+          $("#element3").addClass("bordaPiscante");
+          //  $("#element3").focus();
+          posicao = 3;
+        } else if (e.which === 37) {
+          selection.play();
+          $("#element4").removeClass("bordaPiscante");
+          $("#element2").addClass("bordaPiscante");
+          //   $("#element2").focus();
+          posicao = 2;
+        } else if (e.which === 49) {
+          document.removeEventListener('keydown', keyDown, false);
+          operacao = 5;
+          selected.play();
+          animateSelected2();
+
+
+        }
       }
     }
 
@@ -223,37 +274,33 @@ $(document).ready(function ($) {
       case 5:
         goWindows();
         break;
-  }
+    }
 
   }
 
 
   function runStartupScript() {
-    // const execFile = require('child_process').execFile;
 
-    // execFile('c:/Windows/System32/cscript.exe', ['c:/Arcade/Startup/autorun.vbs'], function (err, data) {
-    //   if (err) {
-    //     console.log(err)
-    //   }
-    //   else
-    //     console.log(data.toString());
-    // });
+    const {
+      spawn
+    } = require('child_process');
 
-    'use strict';
+    const child = spawn('cscript.exe', ['c:/Arcade/Startup/autorun.vbs'], {
+      detached: true,
+      stdio: 'ignore'
+    });
 
-    const
-      spawn = require('child_process').spawnSync,
-      vbs = spawn('cscript.exe', ['c:/Arcade/Startup/autorun.vbs', 'one']);
+    child.unref();
+    remote.getCurrentWindow().close();
 
-    console.log(`stderr: ${vbs.stderr.toString()}`);
-    console.log(`stdout: ${vbs.stdout.toString()}`);
-    console.log(`status: ${vbs.status}`);
 
   }
 
 
   function abreHyperspin() {
-    const { exec } = require('child_process');
+    const {
+      exec
+    } = require('child_process');
     exec('c:/Arcade/FE/HyperSpin/HyperSpin.exe', (error, stdout, stderr) => {
       if (error.code !== 1) {
         console.error(`exec error: ${error}`);
@@ -275,7 +322,11 @@ $(document).ready(function ($) {
 
   function animateDivers() {
     if (!selecionado) {
-      $('#element' + posicao).transition({ 'border-color': '#006700' }, 100).transition({ 'border-color': '#24C72A' }, 100, animateDivers);
+      $('#element' + posicao).transition({
+        'border-color': '#006700'
+      }, 100).transition({
+        'border-color': '#24C72A'
+      }, 100, animateDivers);
     }
 
   }
@@ -284,8 +335,14 @@ $(document).ready(function ($) {
     selecionado = true;
     if (turn < 6) {
       turn++;
-      $('#element' + posicao).transition({ 'background-color': '#FFFFFF', 'border-color': '#006700' }, 60)
-        .transition({ 'background-color': 'transparent', 'border-color': '#24C72A' }, 60, animateSelected2);
+      $('#element' + posicao).transition({
+          'background-color': '#FFFFFF',
+          'border-color': '#006700'
+        }, 60)
+        .transition({
+          'background-color': 'transparent',
+          'border-color': '#24C72A'
+        }, 60, animateSelected2);
 
     } else {
       $('#element' + posicao).addClass("selecionado");
@@ -295,59 +352,93 @@ $(document).ready(function ($) {
         shaokahnSound.play();
         checkSelection();
       }
-      
+
     }
 
   }
 
   function abreExplorer() {
-    var child = require('child_process').execFile;
-    var executablePath = 'C:/Windows/Explorer.EXE';
+    const {
+      spawn
+    } = require('child_process');
 
-    child(executablePath, function (err, data) {
-      if (err.code !== 1) {
-        console.error(err);
-        return;
-      }
-
-      console.log(data.toString());
+    const child = spawn('C:/Windows/Explorer.EXE', {
+      detached: true,
+      stdio: 'ignore'
     });
+
+    child.unref();
   }
 
 
   function findOpenExplorerProcess() {
     const find = require('find-process');
 
-    find('name', 'explorer')
+    find('name', 'Explorer.EXE')
       .then(function (list) {
         if (list.length === 0) {
-          abreExplorer();
+          find('name', 'explorer')
+          .then(function (list2) {
+            if (list2.length === 0) {
+              abreExplorer();
+            }
+    
+          });
         }
 
       });
 
+  }
+
+  function killExplorer() {
+    const {
+      exec
+    } = require('child_process');
+    exec('taskkill /f /IM explorer.exe', (error, stdout, stderr) => {
+      if (error) {
+        console.error(`exec error: ${error}`);
+        return;
+      }
+      console.log(`stdout: ${stdout}`);
+      console.log(`stderr: ${stderr}`);
+    });
   }
 
   function findKillExplorerProcess() {
     const find = require('find-process');
-    const kill  = require('tree-kill');
 
-    find('name', 'explorer')
+    find('name', 'Explorer.EXE')
       .then(function (list) {
-        if (list.length > 0) {
-          kill(list[0].pid);
+        if (list.length == 0) {
+
+          find('name', 'explorer')
+          .then(function (list2) {
+            if (list2.length > 0) {
+              killExplorer(); 
+            }
+          });
+
+        } else {
+          killExplorer(); 
         }
       });
 
   }
 
+
   function startToasty() {
     $("#toasty").show();
-    $('.toasty').transition({ x: '-150px' }).transition({ x: '150px', duration: 1000, delay: 500 });
+    $('.toasty').transition({
+      x: '-150px'
+    }).transition({
+      x: '150px',
+      duration: 1000,
+      delay: 500
+    });
 
 
     delay(function () {
-      toasty.play(); 
+      toasty.play();
       delay(function () {
         $("#toasty").hide();
         checkSelection();
@@ -355,24 +446,17 @@ $(document).ready(function ($) {
     }, 500);
 
 
-    
 
-    
+
+
   }
 
-  $('#dan').click(function() {
+  $('#dan').click(function () {
     startToasty();
   });
-    
-
-
-  
 
 
   //$("#element").focus();
   animateDivers();
 
 });
-
-
-

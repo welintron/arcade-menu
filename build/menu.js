@@ -19,7 +19,7 @@ const remote = require('electron').remote;
     '0laugh1.wav',
     '0laugh2.wav',
     '0laugh3.wav',
-    'toasty.mp3',
+    '0toasty.mp3',
     '2excellent.wav',
     '2excellent2.wav',
     '2feelthewrath.mp3',
@@ -40,10 +40,22 @@ const remote = require('electron').remote;
   $("#toasty").hide();
   $("#dan").hide();
 
-
-  var shaokahnSound = new Howl({
-    src: ['./build/wav/' + soundList[Math.floor(Math.random() * 8)]]
+  const soundLog1 =  localStorage.getItem("soundLog1"); 
+  const soundLog2 =  localStorage.getItem("soundLog2"); 
+  const soundLog3 =  localStorage.getItem("soundLog3"); 
+  
+  const filteredSoundList = $.grep(soundList, function (n, i) {
+    return ( n !== soundLog1 && n !== soundLog2 && n !== soundLog3);
   });
+
+  const soundListDown= $.grep(filteredSoundList, function (n, i) {
+    return ( n.substring(0,1) == '1' || n.substring(0,1) == '0');
+  });
+
+  const soundListUp = $.grep(filteredSoundList, function (n, i) {
+    return ( n.substring(0,1) == '2' || n.substring(0,1) == '0');
+  });
+  var shaokahnSound;
   const selection = new Howl({
     src: ['./build/wav/selection.wav']
   });
@@ -52,7 +64,12 @@ const remote = require('electron').remote;
   });
 
   const toasty = new Howl({
-    src: ['./build/wav/toasty.mp3']
+    src: ['./build/wav/0toasty.mp3']
+  });
+
+  const choose = new Howl({
+    src: ['./build/wav/choosedestiny.mp3'],
+    autoplay: true,
   });
 
 
@@ -129,7 +146,18 @@ const remote = require('electron').remote;
     }, 1000);
   }
 
-  
+  function loadShaoKahnSound() {
+    var sList = ((operacao == 2 || operacao == 4) ? soundListUp : soundListDown );
+    shaokahnSound = new Howl({
+      src: ['./build/wav/' + sList[Math.floor(Math.random() * sList.length)]]
+    });
+  }
+
+  function saveSoundLog() {
+    localStorage.setItem('soundLog1', localStorage.getItem("soundLog2"));
+    localStorage.setItem('soundLog2', localStorage.getItem("soundLog3"));
+    localStorage.setItem('soundLog3', shaokahnSound._src.substring(12,shaokahnSound._src.length));
+  }
 
   document.addEventListener("keyup", function keyUp(e) {
     // reset status of the button 'released' == 'false'
@@ -173,6 +201,8 @@ const remote = require('electron').remote;
           document.removeEventListener('keydown', keyDown, false);
           operacao = 1;
           selected.play();
+          loadShaoKahnSound();
+          saveSoundLog();
           animateSelected2();
         }
 
@@ -195,6 +225,8 @@ const remote = require('electron').remote;
           document.removeEventListener('keydown', keyDown, false);
           operacao = 2;
           selected.play();
+          loadShaoKahnSound();
+          saveSoundLog();
           animateSelected2();
 
         } else if (e.which === 49) {
@@ -202,9 +234,8 @@ const remote = require('electron').remote;
           operacao = 3;
           selected.play();
           //  Math.floor(Math.random() * (max - min + 1)) + min;
-          shaokahnSound = new Howl({
-            src: ['./build/wav/' + soundList[Math.floor(Math.random() * 12) + 4]]
-          });
+          loadShaoKahnSound();
+          saveSoundLog();
           animateSelected2();
 
 
@@ -229,9 +260,8 @@ const remote = require('electron').remote;
           operacao = 4;
           selected.play();
           //  Math.floor(Math.random() * (max - min + 1)) + min;
-          shaokahnSound = new Howl({
-            src: ['./build/wav/' + soundList[Math.floor(Math.random() * 12) + 4]]
-          });
+          loadShaoKahnSound();
+          saveSoundLog();
           animateSelected2();
         }
 
@@ -254,6 +284,8 @@ const remote = require('electron').remote;
           document.removeEventListener('keydown', keyDown, false);
           operacao = 5;
           selected.play();
+          loadShaoKahnSound();
+          saveSoundLog();
           animateSelected2();
 
 
@@ -353,7 +385,7 @@ const remote = require('electron').remote;
 
     } else {
       $('#element' + posicao).addClass("selecionado");
-      if (shaokahnSound._src === './build/wav/toasty.mp3') {
+      if (shaokahnSound._src === './build/wav/0toasty.mp3') {
         startToasty();
       } else {
         shaokahnSound.play();

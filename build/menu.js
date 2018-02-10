@@ -49,11 +49,11 @@ const remote = require('electron').remote;
   });
 
   const soundListDown= $.grep(filteredSoundList, function (n, i) {
-    return ( n.substring(0,1) == '1' || n.substring(0,1) == '0');
+    return ( n.substring(0,1) !== '2');
   });
 
   const soundListUp = $.grep(filteredSoundList, function (n, i) {
-    return ( n.substring(0,1) == '2' || n.substring(0,1) == '0');
+    return ( n.substring(0,1) !== '1');
   });
   var shaokahnSound;
   const selection = new Howl({

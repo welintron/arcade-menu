@@ -32,13 +32,15 @@ const remote = require('electron').remote;
 
   //testador
 
-  // for (i=0; i < 100; i++ ) {
-  //  //Math.floor(Math.random() * (max - min + 1)) + min;
-  //  //console.log(soundList[Math.floor(Math.random() * 8)]); //option for poweroff/reboot/windows
-  //  console.log(soundList[Math.floor(Math.random() * 12 ) + 4]); //option for hyperspin/restart
-  // }
+/*   for (i=0; i < 100; i++ ) {
+   //Math.floor(Math.random() * (max - min + 1)) + min;
+   //console.log(soundList[Math.floor(Math.random() * 8)]); //option for poweroff/reboot/windows
+   console.log(soundList[Math.floor(Math.random() * 12 ) + 4]); //option for hyperspin/restart
+  } */
   $("#toasty").hide();
   $("#dan").hide();
+  $("#bottomText").hide();
+  $("#element1").hide();
 
   const soundLog1 =  localStorage.getItem("soundLog1"); 
   const soundLog2 =  localStorage.getItem("soundLog2"); 
@@ -68,18 +70,26 @@ const remote = require('electron').remote;
   });
 
   const choose = new Howl({
-    src: ['./build/wav/choosedestiny.mp3'],
-    autoplay: true,
+    src: ['./build/wav/choosedestiny.mp3']
   });
 
 
   const music = new Howl({
-    src: ['./build/wav/mk2_wasteland.wav'],
-    autoplay: true,
+    src: ['./build/wav/mk2_wasteland.mp3'],
+    autoplay: false,
     loop: true,
     volume: 0.4
   });
 
+  const gates = new Howl({
+    src: ['./build/wav/menu-mugen2.mp3']
+  });
+  
+  const musicGates = new Howl({
+    src: ['./build/wav/mk2title.mp3'],
+    loop: true,
+    volume: 1
+  });
   
 
   function goPowerOff() {
@@ -147,10 +157,12 @@ const remote = require('electron').remote;
   }
 
   function loadShaoKahnSound() {
-    var sList = ((operacao == 2 || operacao == 4) ? soundListUp : soundListDown );
+    var sList = ((operacao == 3 || operacao == 4) ? soundListUp : soundListDown );   
+
     shaokahnSound = new Howl({
       src: ['./build/wav/' + sList[Math.floor(Math.random() * sList.length)]]
     });
+
   }
 
   function saveSoundLog() {
@@ -484,12 +496,51 @@ const remote = require('electron').remote;
         document.addEventListener('keydown', keyDown, false);
       }, 1000);
     }, 300);
+  }
 
-
+  function startMenu() {
+  //  var menu = Math.floor(Math.random() * 2);
+    var menu = 1;
+    if(menu == 0){
+	  $("body").addClass("menuSnes");  	
+	  $("#element1").show();
+      animateDivers();
+	    music.play();
+      delay(function () {
+        choose.play();
+      }, 500);
+    } else {
+      $('.portalRight').transition({x: '-380px', duration: 1300, delay: 800, easing: 'linear'})
+	  .transition({y: '-2px', duration: 50})
+	  .transition({y: '4px', duration: 100})
+	  .transition({y: '-4px', duration: 100})
+	  .transition({y: '2px', duration: 50});
+      $('.portalLeft').transition({x: '370px', duration: 1300, delay: 800, easing: 'linear'})
+	  .transition({y: '-2px', duration: 50})
+	  .transition({y: '4px', duration: 100})
+	  .transition({y: '-4px', duration: 100})
+	  .transition({y: '2px', duration: 50});
+      $('#bottomText').transition({opacity: 1, delay: 1700, easing: 'linear'})
+	  .transition({y: '-2px', duration: 50})
+	  .transition({y: '4px', duration: 100})
+	  .transition({y: '-4px', duration: 100})
+	  .transition({y: '2px', duration: 50});
+	  delay(function () {
+        gates.play();
+		delay(function () {
+			animateDivers();
+			musicGates.play();
+			$("#bottomText").show();
+			delay(function () {
+				choose.play();
+				$("#element1").show();
+			}, 500);
+		}, 1300);
+      }, 800);
+    }
 
 
   }
-
  
   $('#dan').click(function () {
     startToasty();
@@ -497,6 +548,7 @@ const remote = require('electron').remote;
 
 
   //$("#element").focus();
-  animateDivers();
+  startMenu();
+  //animateDivers();
 
 });

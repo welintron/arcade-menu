@@ -16,10 +16,12 @@ const remote = require('electron').remote;
     '1isthatyourbest.mp3',
     '1weakpathetic.mp3',
     '1youarenothing.mp3',
+    '1Iwin.wav',
     '0laugh1.wav',
     '0laugh2.wav',
     '0laugh3.wav',
     '0toasty.mp3',
+    '2crowd.wav',
     '2excellent.wav',
     '2excellent2.wav',
     '2feelthewrath.mp3',
@@ -28,6 +30,19 @@ const remote = require('electron').remote;
     '2superb2.mp3',
     '2welldone.wav',
     '2youwilldie.mp3'
+  ];
+
+  const charSoundList = [
+    'jax.wav',
+    'kintaro.wav',
+    'liukang.wav',
+    'liukang2.wav',
+    'rayden.wav',
+    'rayden2.wav',
+    'scorpion.wav',
+    'scorpion2.wav',
+    'kunglao.wav',
+    'kunglao2.wav',
   ];
 
   //testador
@@ -45,9 +60,24 @@ const remote = require('electron').remote;
   const soundLog1 =  localStorage.getItem("soundLog1"); 
   const soundLog2 =  localStorage.getItem("soundLog2"); 
   const soundLog3 =  localStorage.getItem("soundLog3"); 
+
+  //limpar contador
+  //localStorage.clear(); 
+
+  const charSoundLog1 =  localStorage.getItem("charSoundLog1"); 
+  const charSoundLog2 =  localStorage.getItem("charSoundLog2"); 
+  const charSoundLog3 =  localStorage.getItem("charSoundLog3");
+  
+
+
+  const charSoundsCount = (localStorage.getItem("charSoundsCount") === null ? 0 : localStorage.getItem("charSoundsCount"));
   
   const filteredSoundList = $.grep(soundList, function (n, i) {
     return ( n !== soundLog1 && n !== soundLog2 && n !== soundLog3);
+  });
+
+  const filteredCharSoundList = $.grep(charSoundList, function (n, i) {
+    return ( n !== charSoundLog1 && n !== charSoundLog2 && n !== charSoundLog3);
   });
 
   const soundListDown= $.grep(filteredSoundList, function (n, i) {
@@ -156,20 +186,34 @@ const remote = require('electron').remote;
     }, 1000);
   }
 
-  function loadShaoKahnSound() {
-    var sList = ((operacao == 3 || operacao == 4) ? soundListUp : soundListDown );   
-
-    shaokahnSound = new Howl({
-      src: ['./build/wav/' + sList[Math.floor(Math.random() * sList.length)]]
-    });
-
-  }
-
   function saveSoundLog() {
     localStorage.setItem('soundLog1', localStorage.getItem("soundLog2"));
     localStorage.setItem('soundLog2', localStorage.getItem("soundLog3"));
     localStorage.setItem('soundLog3', shaokahnSound._src.substring(12,shaokahnSound._src.length));
   }
+
+  function saveCharSoundLog() {
+    localStorage.setItem('charSoundLog1', localStorage.getItem("charSoundLog2"));
+    localStorage.setItem('charSoundLog2', localStorage.getItem("charSoundLog3"));
+    localStorage.setItem('charSoundLog3', shaokahnSound._src.substring(12,shaokahnSound._src.length));
+  }
+
+  function loadShaoKahnSound() {
+    localStorage.setItem('charSoundsCount', (Number(charSoundsCount) + 1));
+    if (charSoundsCount % 7 == 0) {
+      shaokahnSound = new Howl({
+        src: ['./build/wav/' + filteredCharSoundList[Math.floor(Math.random() * filteredCharSoundList.length)]]
+      });
+      saveCharSoundLog();
+    } else {
+      var sList = ((operacao == 3 || operacao == 4) ? soundListUp : soundListDown );   
+      shaokahnSound = new Howl({
+        src: ['./build/wav/' + sList[Math.floor(Math.random() * sList.length)]]
+      });
+      saveSoundLog();
+    }
+  }
+
 
   document.addEventListener("keyup", function keyUp(e) {
     // reset status of the button 'released' == 'false'
@@ -214,7 +258,6 @@ const remote = require('electron').remote;
           operacao = 1;
           selected.play();
           loadShaoKahnSound();
-          saveSoundLog();
           animateSelected2();
         }
 
@@ -238,7 +281,6 @@ const remote = require('electron').remote;
           operacao = 2;
           selected.play();
           loadShaoKahnSound();
-          saveSoundLog();
           animateSelected2();
 
         } else if (e.which === 49) {
@@ -247,7 +289,6 @@ const remote = require('electron').remote;
           selected.play();
           //  Math.floor(Math.random() * (max - min + 1)) + min;
           loadShaoKahnSound();
-          saveSoundLog();
           animateSelected2();
 
 
@@ -273,7 +314,6 @@ const remote = require('electron').remote;
           selected.play();
           //  Math.floor(Math.random() * (max - min + 1)) + min;
           loadShaoKahnSound();
-          saveSoundLog();
           animateSelected2();
         }
 
@@ -297,7 +337,6 @@ const remote = require('electron').remote;
           operacao = 5;
           selected.play();
           loadShaoKahnSound();
-          saveSoundLog();
           animateSelected2();
 
 

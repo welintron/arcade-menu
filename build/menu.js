@@ -122,7 +122,114 @@ const remote = require('electron').remote;
     loop: true,
     volume: 1
   });
+
+  var delay = (function () {
+    var timer = 0;
+    return function (callback, ms) {
+      clearTimeout(timer);
+      timer = setTimeout(callback, ms);
+    };
+  })();
   
+  function killExplorer() {
+    const {
+      exec
+    } = require('child_process');
+    exec('taskkill /f /IM explorer.exe', (error, stdout, stderr) => {
+      if (error) {
+        console.error(`exec error: ${error}`);
+        return;
+      }
+      console.log(`stdout: ${stdout}`);
+      console.log(`stderr: ${stderr}`);
+    });
+  }
+
+  function findKillExplorerProcess() {
+    const find = require('find-process');
+
+    find('name', 'Explorer.EXE')
+      .then(function (list) {
+        if (list.length == 0) {
+
+          find('name', 'explorer')
+          .then(function (list2) {
+            if (list2.length > 0) {
+              killExplorer(); 
+            }
+          });
+
+        } else {
+          killExplorer(); 
+        }
+      });
+
+  }
+
+  function runStartupScript() {
+
+    const {
+      spawn
+    } = require('child_process');
+
+    const child = spawn('cscript.exe', ['c:/Arcade/Startup/autorun.vbs'], {
+      detached: true,
+      stdio: 'ignore'
+    });
+
+    child.unref();
+    remote.getCurrentWindow().close();
+
+
+  }
+
+  function abreHyperspin() {
+    const {
+      exec
+    } = require('child_process');
+    exec('c:/Arcade/FE/HyperSpin/HyperSpin.exe', (error, stdout, stderr) => {
+      if (error.code !== 1) {
+        console.error(`exec error: ${error}`);
+        return;
+      }
+      console.log(`stdout: ${stdout}`);
+      console.log(`stderr: ${stderr}`);
+    });
+  }
+
+  function abreExplorer() {
+    const {
+      spawn
+    } = require('child_process');
+
+    const child = spawn('C:/Windows/Explorer.EXE', {
+      detached: true,
+      stdio: 'ignore'
+    });
+
+    child.unref();
+  }
+
+
+  function findOpenExplorerProcess() {
+    const find = require('find-process');
+
+    find('name', 'Explorer.EXE')
+      .then(function (list) {
+        if (list.length === 0) {
+          find('name', 'explorer')
+          .then(function (list2) {
+            if (list2.length === 0) {
+              abreExplorer();
+            }
+    
+          });
+        }
+
+      });
+
+  }
+
 
   function goPowerOff() {
     delay(function () {
@@ -176,6 +283,10 @@ const remote = require('electron').remote;
     }, 1000);
   }
 
+
+
+
+
   function goWindows() {
     delay(function () {
       try {
@@ -215,6 +326,87 @@ const remote = require('electron').remote;
       saveSoundLog();
     }
   }
+
+  function checkSelection() {
+    switch (operacao) {
+      case 1:
+        goPowerOff();
+        break;
+      case 2:
+        goReboot();
+        break;
+      case 3:
+        goMK2();
+        break;
+      case 4:
+        goHyperspin();
+        break;
+      case 5:
+        goWindows();
+        break;
+    }
+
+  }
+
+  function startToasty(keyDown) {
+    $("#toasty").show();
+   $('.toasty').transition({
+     x: '-150px'
+   }).transition({
+     x: '150px',
+     duration: 800,
+     delay: 300
+   });
+
+   delay(function () {
+     toasty.play();
+     delay(function () {
+       $("#toasty").hide();
+       checkSelection(); 
+       document.addEventListener('keydown', keyDown, false);
+     }, 1000);
+   }, 300);
+ }
+
+
+ function animateSelected2() {
+  selecionado = true;
+  if (turn < 6) {
+    turn++;
+    $('#element' + posicao).transition({
+        'background-color': '#FFFFFF',
+        'border-color': '#006700'
+      }, 60)
+      .transition({
+        'background-color': 'transparent',
+        'border-color': '#24C72A'
+      }, 60, animateSelected2);
+
+  } else {
+    $('#element' + posicao).addClass("selecionado");
+    if (shaokahnSound._src === './build/wav/0toasty.mp3') {
+      startToasty();
+    } else {
+      shaokahnSound.play();
+      checkSelection();
+    }
+
+  }
+
+}
+
+ function changeMenu(){
+  if (menu == 'snes') {
+    menu = 'arcade';
+  } else {
+    menu = 'snes';
+  }
+  localStorage.setItem('menu', menu);
+  delay(function () {
+    location.reload();
+  }, 40);
+  
+}
 
 
   document.addEventListener("keyup", function keyUp(e) {
@@ -350,69 +542,6 @@ const remote = require('electron').remote;
   });
 
 
-  function checkSelection() {
-    switch (operacao) {
-      case 1:
-        goPowerOff();
-        break;
-      case 2:
-        goReboot();
-        break;
-      case 3:
-        goMK2();
-        break;
-      case 4:
-        goHyperspin();
-        break;
-      case 5:
-        goWindows();
-        break;
-    }
-
-  }
-
-
-  function runStartupScript() {
-
-    const {
-      spawn
-    } = require('child_process');
-
-    const child = spawn('cscript.exe', ['c:/Arcade/Startup/autorun.vbs'], {
-      detached: true,
-      stdio: 'ignore'
-    });
-
-    child.unref();
-    remote.getCurrentWindow().close();
-
-
-  }
-
-
-  function abreHyperspin() {
-    const {
-      exec
-    } = require('child_process');
-    exec('c:/Arcade/FE/HyperSpin/HyperSpin.exe', (error, stdout, stderr) => {
-      if (error.code !== 1) {
-        console.error(`exec error: ${error}`);
-        return;
-      }
-      console.log(`stdout: ${stdout}`);
-      console.log(`stderr: ${stderr}`);
-    });
-  }
-
-  var delay = (function () {
-    var timer = 0;
-    return function (callback, ms) {
-      clearTimeout(timer);
-      timer = setTimeout(callback, ms);
-    };
-  })();
-
-
   function animateDivers() {
     if (!selecionado) {
       $('#element' + posicao).transition({
@@ -422,122 +551,6 @@ const remote = require('electron').remote;
       }, 100, animateDivers);
     }
 
-  }
-
-  function animateSelected2() {
-    selecionado = true;
-    if (turn < 6) {
-      turn++;
-      $('#element' + posicao).transition({
-          'background-color': '#FFFFFF',
-          'border-color': '#006700'
-        }, 60)
-        .transition({
-          'background-color': 'transparent',
-          'border-color': '#24C72A'
-        }, 60, animateSelected2);
-
-    } else {
-      $('#element' + posicao).addClass("selecionado");
-      if (shaokahnSound._src === './build/wav/0toasty.mp3') {
-        startToasty();
-      } else {
-        shaokahnSound.play();
-        checkSelection();
-      }
-
-    }
-
-  }
-
-  function abreExplorer() {
-    const {
-      spawn
-    } = require('child_process');
-
-    const child = spawn('C:/Windows/Explorer.EXE', {
-      detached: true,
-      stdio: 'ignore'
-    });
-
-    child.unref();
-  }
-
-
-  function findOpenExplorerProcess() {
-    const find = require('find-process');
-
-    find('name', 'Explorer.EXE')
-      .then(function (list) {
-        if (list.length === 0) {
-          find('name', 'explorer')
-          .then(function (list2) {
-            if (list2.length === 0) {
-              abreExplorer();
-            }
-    
-          });
-        }
-
-      });
-
-  }
-
-  function killExplorer() {
-    const {
-      exec
-    } = require('child_process');
-    exec('taskkill /f /IM explorer.exe', (error, stdout, stderr) => {
-      if (error) {
-        console.error(`exec error: ${error}`);
-        return;
-      }
-      console.log(`stdout: ${stdout}`);
-      console.log(`stderr: ${stderr}`);
-    });
-  }
-
-  function findKillExplorerProcess() {
-    const find = require('find-process');
-
-    find('name', 'Explorer.EXE')
-      .then(function (list) {
-        if (list.length == 0) {
-
-          find('name', 'explorer')
-          .then(function (list2) {
-            if (list2.length > 0) {
-              killExplorer(); 
-            }
-          });
-
-        } else {
-          killExplorer(); 
-        }
-      });
-
-  }
-
-
-  function startToasty(keyDown) {
-     $("#toasty").show();
-    $('.toasty').transition({
-      x: '-150px'
-    }).transition({
-      x: '150px',
-      duration: 800,
-      delay: 300
-    });
-
-
-    delay(function () {
-      toasty.play();
-      delay(function () {
-        $("#toasty").hide();
-        checkSelection(); 
-        document.addEventListener('keydown', keyDown, false);
-      }, 1000);
-    }, 300);
   }
 
   function startMenu() {
@@ -580,19 +593,6 @@ const remote = require('electron').remote;
     }
 
 
-  }
-
-  function changeMenu(){
-    if (menu == 'snes') {
-      menu = 'arcade';
-    } else {
-      menu = 'snes';
-    }
-    localStorage.setItem('menu', menu);
-    delay(function () {
-      location.reload();
-    }, 40);
-    
   }
  
   $('#dan').click(function () {

@@ -67,7 +67,9 @@ const remote = require('electron').remote;
   const charSoundLog1 =  localStorage.getItem("charSoundLog1"); 
   const charSoundLog2 =  localStorage.getItem("charSoundLog2"); 
   const charSoundLog3 =  localStorage.getItem("charSoundLog3");
-  
+
+  //  var menu = Math.floor(Math.random() * 2);
+  var menu = localStorage.getItem("menu");
 
 
   const charSoundsCount = (localStorage.getItem("charSoundsCount") === null ? 0 : localStorage.getItem("charSoundsCount"));
@@ -239,8 +241,9 @@ const remote = require('electron').remote;
       
     } else {
 
-      //if($("#element").is(':focus')) {
-      if (posicao === 1) {
+      if(e.which === 54) {
+        changeMenu();
+      } else if (posicao === 1) {  //if($("#element").is(':focus')) {
         if (e.which === 40) {
           selection.play();
           $("#element1").removeClass("bordaPiscante");
@@ -538,9 +541,7 @@ const remote = require('electron').remote;
   }
 
   function startMenu() {
-  //  var menu = Math.floor(Math.random() * 2);
-    var menu = 1;
-    if(menu == 0){
+    if(menu == 'snes'){    
 	  $("body").addClass("menuSnes");  	
 	  $("#element1").show();
       animateDivers();
@@ -549,12 +550,12 @@ const remote = require('electron').remote;
         choose.play();
       }, 500);
     } else {
-      $('.portalRight').transition({x: '-380px', duration: 1300, delay: 800, easing: 'linear'})
+      $('#portalRight').transition({x: '-380px', duration: 1300, delay: 800, easing: 'linear'})
 	  .transition({y: '-2px', duration: 50})
 	  .transition({y: '4px', duration: 100})
 	  .transition({y: '-4px', duration: 100})
 	  .transition({y: '2px', duration: 50});
-      $('.portalLeft').transition({x: '370px', duration: 1300, delay: 800, easing: 'linear'})
+      $('#portalLeft').transition({x: '370px', duration: 1300, delay: 800, easing: 'linear'})
 	  .transition({y: '-2px', duration: 50})
 	  .transition({y: '4px', duration: 100})
 	  .transition({y: '-4px', duration: 100})
@@ -579,6 +580,19 @@ const remote = require('electron').remote;
     }
 
 
+  }
+
+  function changeMenu(){
+    if (menu == 'snes') {
+      menu = 'arcade';
+    } else {
+      menu = 'snes';
+    }
+    localStorage.setItem('menu', menu);
+    delay(function () {
+      location.reload();
+    }, 40);
+    
   }
  
   $('#dan').click(function () {

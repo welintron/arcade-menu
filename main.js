@@ -73,16 +73,17 @@ app.on('ready', function () {
 
   
   // Create the browser window.
-  mainWindow = new BrowserWindow({ width: 720, height: 480, show: false, icon: './resources/app/mklogo.png', });
+  mainWindow = new BrowserWindow({ width: 720, height: 480, show: false, icon: './resources/app/mklogo.png', backgroundColor: '#000000'});
   mainWindow.setFullScreen(true);
   mainWindow.setMenu(null);
   // and load the index.html of the app.
   mainWindow.loadURL('file://' + __dirname + '/index.html');
   mainWindow.webContents.on('did-finish-load', function() {
-    setTimeout(function(){
+   // setTimeout(function(){
       mainWindow.show(); 
-    }, 40);
+  //  }, 40);
   });
+
 
   // Open the devtools.
   // mainWindow.openDevTools();

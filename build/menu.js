@@ -52,8 +52,6 @@ const remote = require('electron').remote;
    //console.log(soundList[Math.floor(Math.random() * 8)]); //option for poweroff/reboot/windows
    console.log(soundList[Math.floor(Math.random() * 12 ) + 4]); //option for hyperspin/restart
   } */
-  $("#toasty").hide();
-  $("#bottomText").hide();
 
 
   const soundLog1 =  localStorage.getItem("soundLog1"); 
@@ -562,6 +560,8 @@ const remote = require('electron').remote;
         choose.play();
       }, 500);
     } else {
+      $('#portalRight').show();
+      $('#portalLeft').show();
       $('#portalRight').transition({x: '-380px', duration: 1300, delay: 800, easing: 'linear'})
 	  .transition({y: '-2px', duration: 50})
 	  .transition({y: '4px', duration: 100})

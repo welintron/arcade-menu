@@ -91,7 +91,7 @@ const remote = require('electron').remote;
     src: ['./build/wav/selection.wav']
   });
   const selected = new Howl({
-    src: ['./build/wav/selected.wav']
+    src: ['./build/wav/selected2.wav']
   });
 
   const toasty = new Howl({
@@ -562,12 +562,12 @@ const remote = require('electron').remote;
     } else {
       $('#portalRight').show();
       $('#portalLeft').show();
-      $('#portalRight').transition({x: '-380px', duration: 1300, delay: 800, easing: 'linear'})
+      $('#portalRight').transition({x: '-379px', duration: 1300, delay: 800, easing: 'linear'})
 	  .transition({y: '-2px', duration: 50})
 	  .transition({y: '4px', duration: 100})
 	  .transition({y: '-4px', duration: 100})
 	  .transition({y: '2px', duration: 50});
-      $('#portalLeft').transition({x: '370px', duration: 1300, delay: 800, easing: 'linear'})
+      $('#portalLeft').transition({x: '369px', duration: 1300, delay: 800, easing: 'linear'})
 	  .transition({y: '-2px', duration: 50})
 	  .transition({y: '4px', duration: 100})
 	  .transition({y: '-4px', duration: 100})

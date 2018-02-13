@@ -1,6 +1,6 @@
 $(document).ready(function ($) {
   
-  var posicao = 1;
+  var posicao = 2;
   var turn = 1;
   var selecionado = false;
   var operacao = 0;
@@ -53,9 +53,8 @@ const remote = require('electron').remote;
    console.log(soundList[Math.floor(Math.random() * 12 ) + 4]); //option for hyperspin/restart
   } */
   $("#toasty").hide();
-  $("#dan").hide();
   $("#bottomText").hide();
-  $("#element1").hide();
+
 
   const soundLog1 =  localStorage.getItem("soundLog1"); 
   const soundLog2 =  localStorage.getItem("soundLog2"); 
@@ -556,7 +555,7 @@ const remote = require('electron').remote;
   function startMenu() {
     if(menu == 'snes'){    
 	  $("body").addClass("menuSnes");  	
-	  $("#element1").show();
+	  $("#element2").addClass("bordaPiscante");
       animateDivers();
 	    music.play();
       delay(function () {
@@ -580,26 +579,22 @@ const remote = require('electron').remote;
 	  .transition({y: '2px', duration: 50});
 	  delay(function () {
         gates.play();
-		delay(function () {
-			animateDivers();
-			musicGates.play();
-			$("#bottomText").show();
-			delay(function () {
-				choose.play();
-				$("#element1").show();
-			}, 500);
-		}, 1300);
+        delay(function () {
+              animateDivers();
+              $("#bottomText").show();
+              delay(function () {
+                choose.play();
+                $("#element2").addClass("bordaPiscante");
+                delay(function () {
+                  musicGates.play();
+                }, 2000);
+              }, 500);
+        }, 1300);
       }, 800);
     }
 
-
   }
  
-  $('#dan').click(function () {
-    startToasty();
-  });
-
-
   //$("#element").focus();
   startMenu();
   //animateDivers();

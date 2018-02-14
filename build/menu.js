@@ -544,7 +544,7 @@ const remote = require('electron').remote;
       $('#element' + posicao).transition({
         'border-color': '#007B00'  /* '#006700' */
       }, 80).transition({
-        'border-color': '#00FF00'
+        'border-color': '#24C72A'  /* '#00FF00' */
       }, 80, animateDivers);
     }
 

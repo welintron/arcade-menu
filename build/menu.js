@@ -542,10 +542,10 @@ const remote = require('electron').remote;
   function animateDivers() {
     if (!selecionado) {
       $('#element' + posicao).transition({
-        'border-color': '#006700'
-      }, 100).transition({
-        'border-color': '#24C72A'
-      }, 100, animateDivers);
+        'border-color': '#007B00'  /* '#006700' */
+      }, 80).transition({
+        'border-color': '#00FF00'
+      }, 80, animateDivers);
     }
 
   }

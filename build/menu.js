@@ -625,17 +625,17 @@ function startRayden() {
 	  .transition({y: '-2px', duration: 50})
 	  .transition({y: '4px', duration: 100})
 	  .transition({y: '-4px', duration: 100})
-	  .transition({y: '2px', duration: 50});
+	  .transition({y: '0px', duration: 50});
       $('#portalLeft').transition({x: '369px', duration: 1300, delay: 800, easing: 'linear'})
 	  .transition({y: '-2px', duration: 50})
 	  .transition({y: '4px', duration: 100})
 	  .transition({y: '-4px', duration: 100})
-	  .transition({y: '2px', duration: 50});
+	  .transition({y: '0px', duration: 50});
       $('#bottomText').transition({opacity: 1, delay: 1700, easing: 'linear'})
 	  .transition({y: '-2px', duration: 50})
 	  .transition({y: '4px', duration: 100})
 	  .transition({y: '-4px', duration: 100})
-	  .transition({y: '2px', duration: 50});
+	  .transition({y: '0px', duration: 50});
 	  delay(function () {
         gates.play();
         delay(function () {

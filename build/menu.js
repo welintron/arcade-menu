@@ -21,6 +21,7 @@ const remote = require('electron').remote;
     '0laugh2.wav',
     '0laugh3.wav',
     '0toasty.mp3',
+    '0toasty2.mp3',
     '2crowd.wav',
     '2excellent.wav',
     '2excellent2.wav',
@@ -45,15 +46,32 @@ const remote = require('electron').remote;
     'kunglao2.wav',
   ];
 
+  const arenaList = [
+    'Armory.png',
+    'Courtyard.png',
+    'Dead_pool.png',
+    'Goros_lair.png',
+    'Khans_arena.png',
+    'Kombat_tomb.png',
+    'Living_forest.png',
+    'Portal.png',
+    'The_pit_2.png',
+    'Wasteland.png',
+  ];
+
   //testador
 
 /*   for (i=0; i < 100; i++ ) {
    //Math.floor(Math.random() * (max - min + 1)) + min;
    //console.log(soundList[Math.floor(Math.random() * 8)]); //option for poweroff/reboot/windows
-   console.log(soundList[Math.floor(Math.random() * 12 ) + 4]); //option for hyperspin/restart
+   //console.log(soundList[Math.floor(Math.random() * 12 ) + 4]); //option for hyperspin/restart
+  // console.log(arenaList[Math.floor(Math.random() * 10)]); //option for hyperspin/restart
   } */
 
+  const arena = arenaList[Math.floor(Math.random() * 10)];
+  $("body").css("background-image", `url(./arenas/${arena})`);
 
+  
   const soundLog1 =  localStorage.getItem("soundLog1"); 
   const soundLog2 =  localStorage.getItem("soundLog2"); 
   const soundLog3 =  localStorage.getItem("soundLog3"); 
@@ -365,6 +383,44 @@ const remote = require('electron').remote;
    }, 300);
  }
 
+ function startToastyPyke() {
+  $("#toastypyke").show();
+ $('#toastypyke').transition({
+   x: '-120px'
+ }).transition({
+   x: '120px',
+   duration: 800,
+   delay: 300
+ });
+
+ delay(function () {
+   shaokahnSound.play();
+   delay(function () {
+     $("#toastypyke").hide();
+     checkSelection(); 
+   }, 1000);
+ }, 300);
+}
+
+function startRayden() {
+  $("#rayden").show();
+ $('#rayden').transition({
+   x: '-150px'
+ }).transition({
+   x: '150px',
+   duration: 800,
+   delay: 300
+ });
+
+ delay(function () {
+   shaokahnSound.play();
+   delay(function () {
+     $("#rayden").hide();
+     checkSelection(); 
+   }, 1000);
+ }, 300);
+}
+
 
  function animateSelected2() {
   selecionado = true;
@@ -383,6 +439,10 @@ const remote = require('electron').remote;
     $('#element' + posicao).addClass("selecionado");
     if (shaokahnSound._src === './build/wav/0toasty.mp3') {
       startToasty();
+    } else if (shaokahnSound._src === './build/wav/0toasty2.mp3') {  
+      startToastyPyke(); 
+    } else if (shaokahnSound._src === './build/wav/rayden2.wav') {  
+      startRayden();         
     } else {
       shaokahnSound.play();
       checkSelection();
@@ -427,7 +487,6 @@ const remote = require('electron').remote;
     if (keys["downP2"] && keys["startP2"]) {
       document.removeEventListener('keydown', keyDown, false); 
       startToasty(keyDown);
-      
     } else {
 
       if(e.which === 54) {

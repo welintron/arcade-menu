@@ -67,7 +67,6 @@
 
 
         body {
-            background-image: url(Wasteland.png); 
             background-color: black;
             background-repeat: no-repeat;
             -moz-background-size: 720px 480px;
@@ -144,6 +143,32 @@
           display: none;
         }
 
+        .toastypyke {
+          position: fixed;
+          bottom: 0;
+          background-image: url("pyke.png");
+          background-repeat: no-repeat;
+		      background-size: cover;
+          width: 105px;
+          height: 140px;
+          left: 720px;
+		      z-index: 4;
+          display: none;
+        }
+
+        .rayden {
+          position: fixed;
+          bottom: 0;
+          background-image: url("raydenpyke.png");
+          background-repeat: no-repeat;
+		      background-size: cover;
+          width: 88px;
+          height: 140px;
+          left: 720px;
+		      z-index: 4;
+          display: none;
+        }
+
 
       </style>  
        
@@ -160,6 +185,8 @@
             <div tabindex="2" id="element3" ></div>
             <div tabindex="3" id="element4" ></div>
             <div class="toasty" id="toasty"></div>
+            <div class="toastypyke" id="toastypyke"></div>
+            <div class="rayden" id="rayden"></div>
             <div class="bottomText" id="bottomText">CHOOSE YOUR DESTINY</div>
           </div>  
       </div>  

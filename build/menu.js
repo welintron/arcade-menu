@@ -1,5 +1,4 @@
 $(document).ready(function ($) {
-  
   var posicao = 2;
   var turn = 1;
   var selecionado = false;
@@ -477,8 +476,7 @@ function startRayden() {
 
   });
 
-  document.addEventListener("keydown", function keyDown(e) {
-
+   document.addEventListener("keydown", function keyDown(e) {
     if (e.which == 70) {
       keys["downP2"] = true;
     } else if (e.which == 50) {
@@ -619,18 +617,20 @@ function startRayden() {
         choose.play();
       }, 500);
     } else {
+      $(document).off('keypress');
       $('#portalRight').show();
       $('#portalLeft').show();
-      $('#portalRight').transition({x: '-379px', duration: 1300, delay: 800, easing: 'linear'})
+      $('#portalRight').transition({x: '-381px', duration: 1300, delay: 800, easing: 'linear'})
 	  .transition({y: '-2px', duration: 50})
 	  .transition({y: '4px', duration: 100})
 	  .transition({y: '-4px', duration: 100})
 	  .transition({y: '0px', duration: 50});
-      $('#portalLeft').transition({x: '369px', duration: 1300, delay: 800, easing: 'linear'})
+      $('#portalLeft').transition({x: '381px', duration: 1300, delay: 800, easing: 'linear'})
 	  .transition({y: '-2px', duration: 50})
 	  .transition({y: '4px', duration: 100})
 	  .transition({y: '-4px', duration: 100})
-	  .transition({y: '0px', duration: 50});
+    .transition({y: '0px', duration: 50});
+    $('.blocoDireito').transition({ 'background-color': 'black', delay: 2050, easing: 'snap', duration: 1 });
       $('#bottomText').transition({opacity: 1, delay: 1700, easing: 'linear'})
 	  .transition({y: '-2px', duration: 50})
 	  .transition({y: '4px', duration: 100})
@@ -643,7 +643,7 @@ function startRayden() {
               $("#bottomText").show();
               delay(function () {
                 choose.play();
-                $("#element2").addClass("bordaPiscante");
+                $(document).on('keypress');
                 delay(function () {
                   musicGates.play();
                 }, 2000);

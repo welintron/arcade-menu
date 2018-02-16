@@ -181,6 +181,34 @@
           display: none;
         }
 
+        progress {
+          -webkit-appearance: none;
+          appearance: none;
+        }
+
+        progress::-webkit-progress-bar {
+          background-color: red;
+          border-style: double;
+          border-color: silver;
+          border-width: 1px;
+          background-image: 
+          -webkit-linear-gradient(darkred 2px, red, darkred);
+        }
+        progress::-webkit-progress-value {
+          background-color: green;
+/*           background-image:
+          -webkit-linear-gradient(-45deg, 
+                                  transparent 33%, rgba(0, 0, 0, .1) 33%, 
+                                  rgba(0,0, 0, .1) 66%, transparent 99%),
+          -webkit-linear-gradient(top, 
+                                  rgba(255, 255, 255, .25), 
+                                  rgba(0, 0, 0, .25)),
+          -webkit-linear-gradient(left, green, #f44); */
+
+          border-radius: 2px; 
+          background-size: 35px 20px, 100% 100%, 100% 100%;
+        }
+
 
       </style>  
        
@@ -200,7 +228,9 @@
             <div class="toastypyke" id="toastypyke"></div>
             <div class="rayden" id="rayden"></div>
             <div class="liukang" id="liukang"></div>
-            <div class="bottomText" id="bottomText">CHOOSE YOUR DESTINY</div>
+            <div class="bottomText" id="bottomText">CHOOSE 
+              <progress value="0" max="10" id="progressBar"><span id="countdowntimer">10 </span></progress>
+            </div>
           </div>  
       </div>  
 

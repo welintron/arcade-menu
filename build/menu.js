@@ -484,7 +484,7 @@ $(document).ready(function ($) {
     }
     if (keys["downP2"] && keys["startP2"]) {
       document.removeEventListener('keydown', keyDown, false); 
-      startToasty('toasty');
+      startCharAnimations('toasty');
     } else {
 
       if(e.which === 54) {
@@ -609,15 +609,20 @@ $(document).ready(function ($) {
 
   function startMenu() {
     if(menu == 'snes'){    
-	  $("body").addClass("menuSnes");  	
-	  $("#element2").addClass("bordaPiscante");
+    $("body").addClass("menuSnes");  	
+    $("#element2").addClass("bordaPiscante");
+    $(".bordaPiscante").css({'width': '292px'}); 
       animateDivers();
 	    music.play();
       delay(function () {
         choose.play();
       }, 500);
     } else {
-      document.removeEventListener('keydown', keyDown, false); 
+      document.removeEventListener('keydown', keyDown, false);
+      $("#element1").css({'left': '73px'}); 
+      $("#element2").css({'left': '73px'});
+      $("#element3").css({'left': '399px'}); 
+      $("#element4").css({'left': '399px'});        
       $('#portalRight').show();
       $('#portalLeft').show();
       $('#portalRight').transition({x: '-381px', duration: 1500, delay: 800, easing: 'linear'})
@@ -631,15 +636,14 @@ $(document).ready(function ($) {
 	  .transition({y: '-4px', duration: 100})
     .transition({y: '0px', duration: 50});
     $('.blocoDireito').transition({ 'background-color': '#393839', delay: 2250, easing: 'snap', duration: 1 });
-      $('#bottomText').transition({opacity: 1, delay: 1700, easing: 'linear'})
-	  .transition({y: '-2px', duration: 50})
+    $('.bottomText').delay(2300).show(0);
+	  $('.bottomText').transition({y: '-2px', duration: 50})
 	  .transition({y: '4px', duration: 100})
 	  .transition({y: '-4px', duration: 100})
 	  .transition({y: '0px', duration: 50});
 	  delay(function () {
         gates.play();
         delay(function () {
-              $("#bottomText").show();
               delay(function () {
                 choose.play();
                 $("#element2").addClass("bordaPiscante");
@@ -647,6 +651,7 @@ $(document).ready(function ($) {
                 document.addEventListener('keydown', keyDown, false); 
                 delay(function () {
                   musicGates.play();
+                  countDown();
                 }, 2000);
               }, 500);
         }, 1300);
@@ -654,6 +659,18 @@ $(document).ready(function ($) {
     }
 
   }
+
+  function countDown() {
+    var timeleft = 5;
+    var downloadTimer = setInterval(function(){
+    document.getElementById("progressBar").value = 5 - --timeleft;
+    document.getElementById("countdowntimer").textContent = timeleft;
+    if(timeleft <= 0)
+      clearInterval(downloadTimer);
+    },1000);
+  }
+
+
  
   //$("#element").focus();
   startMenu();

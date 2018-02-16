@@ -47,7 +47,7 @@ const remote = require('electron').remote;
 
   const arenaList = [
     'Armory.png',
-    'Courtyard.png',
+    'The_tower.png',
     'Dead_pool.png',
     'Goros_lair.png',
     'Khans_arena.png',
@@ -335,7 +335,7 @@ const remote = require('electron').remote;
     } else {
       var sList = ((operacao == 3 || operacao == 4) ? soundListUp : soundListDown );   
       shaokahnSound = new Howl({
-        src: ['./build/wav/' + sList[Math.floor(Math.random() * sList.length)]]
+      src: ['./build/wav/' + sList[Math.floor(Math.random() * sList.length)]]
       });
       saveSoundLog();
     }
@@ -362,7 +362,7 @@ const remote = require('electron').remote;
 
   }
 
-  function startToasty(keyDown) {
+  function startToasty() {
     $("#toasty").show();
    $('.toasty').transition({
      x: '-150px'
@@ -420,6 +420,20 @@ function startRayden() {
  }, 300);
 }
 
+function startLiuKang() {
+  $("#liukang").show();
+ $('#liukang').transition({
+   x: '-1000px', duration: 1700, easing: 'linear'
+ });
+
+ delay(function () {
+   shaokahnSound.play();
+   delay(function () {
+     checkSelection(); 
+   }, 1000);
+ }, 300);
+}
+
 
  function animateSelected2() {
   selecionado = true;
@@ -441,7 +455,9 @@ function startRayden() {
     } else if (shaokahnSound._src === './build/wav/0toasty2.mp3') {  
       startToastyPyke(); 
     } else if (shaokahnSound._src === './build/wav/rayden2.wav') {  
-      startRayden();         
+      startRayden();
+    } else if (shaokahnSound._src === './build/wav/liukang.wav') {  
+      startLiuKang();                 
     } else {
       shaokahnSound.play();
       checkSelection();
@@ -476,7 +492,8 @@ function startRayden() {
 
   });
 
-   document.addEventListener("keydown", function keyDown(e) {
+
+  function keyDown(e) {
     if (e.which == 70) {
       keys["downP2"] = true;
     } else if (e.which == 50) {
@@ -484,7 +501,7 @@ function startRayden() {
     }
     if (keys["downP2"] && keys["startP2"]) {
       document.removeEventListener('keydown', keyDown, false); 
-      startToasty(keyDown);
+      startToasty();
     } else {
 
       if(e.which === 54) {
@@ -593,7 +610,9 @@ function startRayden() {
       }
     }
 
-  });
+  }
+
+   document.addEventListener("keydown", keyDown);
 
 
   function animateDivers() {
@@ -617,7 +636,7 @@ function startRayden() {
         choose.play();
       }, 500);
     } else {
-      $(document).off('keypress');
+      document.removeEventListener('keydown', keyDown, false); 
       $('#portalRight').show();
       $('#portalLeft').show();
       $('#portalRight').transition({x: '-381px', duration: 1300, delay: 800, easing: 'linear'})
@@ -630,7 +649,7 @@ function startRayden() {
 	  .transition({y: '4px', duration: 100})
 	  .transition({y: '-4px', duration: 100})
     .transition({y: '0px', duration: 50});
-    $('.blocoDireito').transition({ 'background-color': 'black', delay: 2050, easing: 'snap', duration: 1 });
+    $('.blocoDireito').transition({ 'background-color': '#393839', delay: 2050, easing: 'snap', duration: 1 });
       $('#bottomText').transition({opacity: 1, delay: 1700, easing: 'linear'})
 	  .transition({y: '-2px', duration: 50})
 	  .transition({y: '4px', duration: 100})
@@ -639,11 +658,12 @@ function startRayden() {
 	  delay(function () {
         gates.play();
         delay(function () {
-              animateDivers();
               $("#bottomText").show();
               delay(function () {
                 choose.play();
-                $(document).on('keypress');
+                $("#element2").addClass("bordaPiscante");
+                animateDivers();
+                document.addEventListener('keydown', keyDown, false); 
                 delay(function () {
                   musicGates.play();
                 }, 2000);

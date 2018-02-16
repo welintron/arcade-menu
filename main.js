@@ -74,7 +74,7 @@ app.on('ready', function () {
   
   // Create the browser window.
   mainWindow = new BrowserWindow({ width: 720, height: 480, show: false, icon: './resources/app/mklogo.png', backgroundColor: '#000000'});
-  mainWindow.setFullScreen(true);
+  mainWindow.setFullScreen(false);
   mainWindow.setMenu(null);
   // and load the index.html of the app.
   mainWindow.loadURL('file://' + __dirname + '/index.html');

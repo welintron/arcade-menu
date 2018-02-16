@@ -6,9 +6,36 @@ $(document).ready(function ($) {
   var keys = {
     downP2: false,
     startP2: false
-};
+  };
 
-const remote = require('electron').remote;
+  const arenaList = [
+    'Armory.png',
+    'The_tower.png',
+    'Dead_pool.png',
+    'Goros_lair.png',
+    'Khans_arena.png',
+    'Kombat_tomb.png',
+    'Living_forest.png',
+    'Portal.png',
+    'The_pit_2.png',
+    'Wasteland.png',
+  ];
+
+  const arenaLog1 =  localStorage.getItem("arenaLog1"); 
+  const arenaLog2 =  localStorage.getItem("arenaLog2"); 
+  const arenaLog3 =  localStorage.getItem("arenaLog3"); 
+
+  const filteredArenaList = $.grep(arenaList, function (n, i) {
+    return ( n !== arenaLog1 && n !== arenaLog2 && n !== arenaLog3);
+  });
+
+  const arena = filteredArenaList[Math.floor(Math.random() * filteredArenaList.length)];
+  $("body").css("background-image", `url(./arenas/${arena})`);
+  localStorage.setItem('arenaLog1', localStorage.getItem("arenaLog2"));
+  localStorage.setItem('arenaLog2', localStorage.getItem("arenaLog3"));
+  localStorage.setItem('arenaLog3', arena);
+
+  const remote = require('electron').remote;
 
   const soundList = [
     '1dontmake.mp3',
@@ -45,18 +72,6 @@ const remote = require('electron').remote;
     'kunglao2.wav',
   ];
 
-  const arenaList = [
-    'Armory.png',
-    'The_tower.png',
-    'Dead_pool.png',
-    'Goros_lair.png',
-    'Khans_arena.png',
-    'Kombat_tomb.png',
-    'Living_forest.png',
-    'Portal.png',
-    'The_pit_2.png',
-    'Wasteland.png',
-  ];
 
   //testador
 
@@ -66,10 +81,6 @@ const remote = require('electron').remote;
    //console.log(soundList[Math.floor(Math.random() * 12 ) + 4]); //option for hyperspin/restart
   // console.log(arenaList[Math.floor(Math.random() * 10)]); //option for hyperspin/restart
   } */
-
-  const arena = arenaList[Math.floor(Math.random() * 10)];
-  $("body").css("background-image", `url(./arenas/${arena})`);
-
   
   const soundLog1 =  localStorage.getItem("soundLog1"); 
   const soundLog2 =  localStorage.getItem("soundLog2"); 
@@ -108,7 +119,7 @@ const remote = require('electron').remote;
     src: ['./build/wav/selection.wav']
   });
   const selected = new Howl({
-    src: ['./build/wav/selected2.wav']
+    src: ['./build/wav/selected.wav']
   });
 
   const toasty = new Howl({
@@ -298,9 +309,6 @@ const remote = require('electron').remote;
   }
 
 
-
-
-
   function goWindows() {
     delay(function () {
       try {
@@ -336,6 +344,7 @@ const remote = require('electron').remote;
       var sList = ((operacao == 3 || operacao == 4) ? soundListUp : soundListDown );   
       shaokahnSound = new Howl({
       src: ['./build/wav/' + sList[Math.floor(Math.random() * sList.length)]]
+    //  src: ['./build/wav/liukang.wav']  // para testar animação
       });
       saveSoundLog();
     }
@@ -362,80 +371,48 @@ const remote = require('electron').remote;
 
   }
 
-  function startToasty() {
-    $("#toasty").show();
-   $('.toasty').transition({
-     x: '-150px'
-   }).transition({
-     x: '150px',
-     duration: 800,
-     delay: 300
-   });
+
+  function startCharAnimations(name) {
+    var sound = name == 'toasty'? toasty: shaokahnSound;
+    $(`#${name}`).show();
+    switch (name) {
+      case 'toastypyke':
+        $('#toastypyke').transition({
+          x: '-120px'
+        }).transition({
+          x: '120px',
+          duration: 800,
+          delay: 300
+        });
+        break;
+     case 'liukang':
+        $('#liukang').transition({
+          x: '-1000px', duration: 1700, easing: 'linear'
+        });
+        break;
+     default:
+        $(`#${name}`).transition({
+          x: '-150px'
+        }).transition({
+          x: '150px',
+          duration: 800,
+          delay: 300
+        });     
+    }
 
    delay(function () {
-     toasty.play();
+     sound.play();
      delay(function () {
-       $("#toasty").hide();
+       name != 'liukang' ? $(`#${name}`).hide() : $("liukang").show(1700);
        checkSelection(); 
        document.addEventListener('keydown', keyDown, false);
      }, 1000);
    }, 300);
  }
 
- function startToastyPyke() {
-  $("#toastypyke").show();
- $('#toastypyke').transition({
-   x: '-120px'
- }).transition({
-   x: '120px',
-   duration: 800,
-   delay: 300
- });
-
- delay(function () {
-   shaokahnSound.play();
-   delay(function () {
-     $("#toastypyke").hide();
-     checkSelection(); 
-   }, 1000);
- }, 300);
-}
-
-function startRayden() {
-  $("#rayden").show();
- $('#rayden').transition({
-   x: '-150px'
- }).transition({
-   x: '150px',
-   duration: 800,
-   delay: 300
- });
-
- delay(function () {
-   shaokahnSound.play();
-   delay(function () {
-     $("#rayden").hide();
-     checkSelection(); 
-   }, 1000);
- }, 300);
-}
-
-function startLiuKang() {
-  $("#liukang").show();
- $('#liukang').transition({
-   x: '-1000px', duration: 1700, easing: 'linear'
- });
-
- delay(function () {
-   shaokahnSound.play();
-   delay(function () {
-     checkSelection(); 
-   }, 1000);
- }, 300);
-}
 
 
- function animateSelected2() {
+ function animateSelected() {
   selecionado = true;
   if (turn < 6) {
     turn++;
@@ -446,21 +423,27 @@ function startLiuKang() {
       .transition({
         'background-color': 'transparent',
         'border-color': '#24C72A'
-      }, 60, animateSelected2);
+      }, 60, animateSelected);
 
   } else {
     $('#element' + posicao).addClass("selecionado");
-    if (shaokahnSound._src === './build/wav/0toasty.mp3') {
-      startToasty();
-    } else if (shaokahnSound._src === './build/wav/0toasty2.mp3') {  
-      startToastyPyke(); 
-    } else if (shaokahnSound._src === './build/wav/rayden2.wav') {  
-      startRayden();
-    } else if (shaokahnSound._src === './build/wav/liukang.wav') {  
-      startLiuKang();                 
-    } else {
-      shaokahnSound.play();
-      checkSelection();
+    var soundFileName = shaokahnSound._src.substring(12,shaokahnSound._src.length);
+    switch (soundFileName) {
+      case '0toasty.mp3':
+        startCharAnimations('toasty');
+        break;
+      case '0toasty2.mp3':
+        startCharAnimations('toastypyke');
+        break;
+      case 'rayden2.wav':
+        startCharAnimations('rayden');
+        break;
+      case 'liukang.wav':
+        startCharAnimations('liukang');
+        break;
+      default:
+        shaokahnSound.play();
+        checkSelection();
     }
 
   }
@@ -501,7 +484,7 @@ function startLiuKang() {
     }
     if (keys["downP2"] && keys["startP2"]) {
       document.removeEventListener('keydown', keyDown, false); 
-      startToasty();
+      startToasty('toasty');
     } else {
 
       if(e.which === 54) {
@@ -524,7 +507,7 @@ function startLiuKang() {
           operacao = 1;
           selected.play();
           loadShaoKahnSound();
-          animateSelected2();
+          animateSelected();
         }
 
         //} else if($("#element2").is(':focus')) {
@@ -547,7 +530,7 @@ function startLiuKang() {
           operacao = 2;
           selected.play();
           loadShaoKahnSound();
-          animateSelected2();
+          animateSelected();
 
         } else if (e.which === 49) {
           document.removeEventListener('keydown', keyDown, false);
@@ -555,7 +538,7 @@ function startLiuKang() {
           selected.play();
           //  Math.floor(Math.random() * (max - min + 1)) + min;
           loadShaoKahnSound();
-          animateSelected2();
+          animateSelected();
 
 
         }
@@ -580,7 +563,7 @@ function startLiuKang() {
           selected.play();
           //  Math.floor(Math.random() * (max - min + 1)) + min;
           loadShaoKahnSound();
-          animateSelected2();
+          animateSelected();
         }
 
 
@@ -603,9 +586,7 @@ function startLiuKang() {
           operacao = 5;
           selected.play();
           loadShaoKahnSound();
-          animateSelected2();
-
-
+          animateSelected();
         }
       }
     }
@@ -639,17 +620,17 @@ function startLiuKang() {
       document.removeEventListener('keydown', keyDown, false); 
       $('#portalRight').show();
       $('#portalLeft').show();
-      $('#portalRight').transition({x: '-381px', duration: 1300, delay: 800, easing: 'linear'})
+      $('#portalRight').transition({x: '-381px', duration: 1500, delay: 800, easing: 'linear'})
 	  .transition({y: '-2px', duration: 50})
 	  .transition({y: '4px', duration: 100})
 	  .transition({y: '-4px', duration: 100})
 	  .transition({y: '0px', duration: 50});
-      $('#portalLeft').transition({x: '381px', duration: 1300, delay: 800, easing: 'linear'})
+      $('#portalLeft').transition({x: '381px', duration: 1500, delay: 800, easing: 'linear'})
 	  .transition({y: '-2px', duration: 50})
 	  .transition({y: '4px', duration: 100})
 	  .transition({y: '-4px', duration: 100})
     .transition({y: '0px', duration: 50});
-    $('.blocoDireito').transition({ 'background-color': '#393839', delay: 2050, easing: 'snap', duration: 1 });
+    $('.blocoDireito').transition({ 'background-color': '#393839', delay: 2250, easing: 'snap', duration: 1 });
       $('#bottomText').transition({opacity: 1, delay: 1700, easing: 'linear'})
 	  .transition({y: '-2px', duration: 50})
 	  .transition({y: '4px', duration: 100})
@@ -676,6 +657,5 @@ function startLiuKang() {
  
   //$("#element").focus();
   startMenu();
-  //animateDivers();
 
 });

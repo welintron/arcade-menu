@@ -269,13 +269,15 @@ $(document).ready(function ($) {
     var timeleft = 5;
     var downloadTimer = setInterval(function(){
       if (stopCounter == true) {
-        document.getElementById("progressBar").value = 0;
+        document.getElementById("progressBar").value = 5;
         document.getElementById("countdowntimer").textContent = 5;
         $("#countdowntimer").attr('data-text', 5);
         clearInterval(downloadTimer);
         return;
       }
-    document.getElementById("progressBar").value = 5 - --timeleft;
+
+ //   document.getElementById("progressBar").value = 5 - --timeleft;  //barra progressiva
+    document.getElementById("progressBar").value  = --timeleft;
     document.getElementById("countdowntimer").textContent = timeleft;
     $("#countdowntimer").attr('data-text', timeleft);
     if(timeleft <= 0) {

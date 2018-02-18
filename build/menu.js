@@ -2,6 +2,8 @@ $(document).ready(function ($) {
   var posicao = 2;
   var turn = 1;
   var selecionado = false;
+  var shutdown = false;
+  var stopCounter = false;
   var operacao = 0;
   var keys = {
     downP2: false,
@@ -64,8 +66,8 @@ $(document).ready(function ($) {
     'kintaro.wav',
     'liukang.wav',
     'liukang2.wav',
-    'rayden.wav',
-    'rayden2.wav',
+    'raiden.wav',
+    'raiden2.wav',
     'scorpion.wav',
     'scorpion2.wav',
     'kunglao.wav',
@@ -81,40 +83,48 @@ $(document).ready(function ($) {
    //console.log(soundList[Math.floor(Math.random() * 12 ) + 4]); //option for hyperspin/restart
   // console.log(arenaList[Math.floor(Math.random() * 10)]); //option for hyperspin/restart
   } */
-  
-  const soundLog1 =  localStorage.getItem("soundLog1"); 
-  const soundLog2 =  localStorage.getItem("soundLog2"); 
-  const soundLog3 =  localStorage.getItem("soundLog3"); 
 
+  
   //limpar contador
   //localStorage.clear(); 
-
-  const charSoundLog1 =  localStorage.getItem("charSoundLog1"); 
-  const charSoundLog2 =  localStorage.getItem("charSoundLog2"); 
-  const charSoundLog3 =  localStorage.getItem("charSoundLog3");
 
   //  var menu = Math.floor(Math.random() * 2);
   var menu = localStorage.getItem("menu");
 
 
-  const charSoundsCount = (localStorage.getItem("charSoundsCount") === null ? 0 : localStorage.getItem("charSoundsCount"));
+  var soundLog1, soundLog2, soundLog3, charSoundLog1, charSoundLog2, charSoundLog3, shaokahnSound;
+
+  function loadSoundList() {
+
+    soundLog1 =  localStorage.getItem("soundLog1"); 
+    soundLog2 =  localStorage.getItem("soundLog2"); 
+    soundLog3 =  localStorage.getItem("soundLog3"); 
   
-  const filteredSoundList = $.grep(soundList, function (n, i) {
-    return ( n !== soundLog1 && n !== soundLog2 && n !== soundLog3);
-  });
+    charSoundLog1 =  localStorage.getItem("charSoundLog1"); 
+    charSoundLog2 =  localStorage.getItem("charSoundLog2"); 
+    charSoundLog3 =  localStorage.getItem("charSoundLog3");
 
-  const filteredCharSoundList = $.grep(charSoundList, function (n, i) {
-    return ( n !== charSoundLog1 && n !== charSoundLog2 && n !== charSoundLog3);
-  });
+    charSoundsCount = (localStorage.getItem("charSoundsCount") === null ? 0 : localStorage.getItem("charSoundsCount"));
+  
+    filteredSoundList = $.grep(soundList, function (n, i) {
+      return ( n !== soundLog1 && n !== soundLog2 && n !== soundLog3);
+    });
+  
+    filteredCharSoundList = $.grep(charSoundList, function (n, i) {
+      return ( n !== charSoundLog1 && n !== charSoundLog2 && n !== charSoundLog3);
+    });
+  
+    soundListDown= $.grep(filteredSoundList, function (n, i) {
+      return ( n.substring(0,1) !== '2');
+    });
+  
+    soundListUp = $.grep(filteredSoundList, function (n, i) {
+      return ( n.substring(0,1) !== '1');
+    });
+  }
 
-  const soundListDown= $.grep(filteredSoundList, function (n, i) {
-    return ( n.substring(0,1) !== '2');
-  });
+  loadSoundList();
 
-  const soundListUp = $.grep(filteredSoundList, function (n, i) {
-    return ( n.substring(0,1) !== '1');
-  });
-  var shaokahnSound;
   const selection = new Howl({
     src: ['./build/wav/selection.wav']
   });
@@ -255,13 +265,43 @@ $(document).ready(function ($) {
 
   }
 
+  function countDown() {
+    var timeleft = 5;
+    var downloadTimer = setInterval(function(){
+      if (stopCounter == true) {
+        document.getElementById("progressBar").value = 0;
+        document.getElementById("countdowntimer").textContent = 5;
+        $("#countdowntimer").attr('data-text', 5);
+        clearInterval(downloadTimer);
+        return;
+      }
+    document.getElementById("progressBar").value = 5 - --timeleft;
+    document.getElementById("countdowntimer").textContent = timeleft;
+    $("#countdowntimer").attr('data-text', timeleft);
+    if(timeleft <= 0) {
+      clearInterval(downloadTimer);
+      return;
+    }
+    },1000);
+  }
+  
+  function startCountDown() {
+      countDown();
+      $("#pbText").addClass("pbText");
+      $("#pbText").text(posicao == 1 ? "SHUTDOWN IN " : "RESTARTING IN ");
+      $("#pbText").attr('data-text', $("#pbText").text());
+      $("#countdowntimer").show();
+      $("#countdown").show();
+  
+  }
 
   function goPowerOff() {
-    delay(function () {
+    shutdown = true;
+
       const {
         exec
       } = require('child_process');
-      exec('shutdown -s -f -t 00', (error, stdout, stderr) => {
+      exec('shutdown -s -f -t 05', (error, stdout, stderr) => {
         if (error) {
           console.error(`exec error: ${error}`);
           return;
@@ -269,15 +309,18 @@ $(document).ready(function ($) {
         console.log(`stdout: ${stdout}`);
         console.log(`stderr: ${stderr}`);
       });
-    }, 4000);
+      stopCounter = false;
+      startCountDown();
+  
   }
 
   function goReboot() {
-    delay(function () {
+    shutdown = true;
+    
       const {
         exec
       } = require('child_process');
-      exec('shutdown -r -f -t 00', (error, stdout, stderr) => {
+      exec( 'shutdown -r -f -t 05' , (error, stdout, stderr) => {
         if (error) {
           console.error(`exec error: ${error}`);
           return;
@@ -285,7 +328,9 @@ $(document).ready(function ($) {
         console.log(`stdout: ${stdout}`);
         console.log(`stderr: ${stderr}`);
       });
-    }, 4000);
+      stopCounter = false;
+      startCountDown();
+   
   }
 
   function goMK2() {
@@ -321,6 +366,130 @@ $(document).ready(function ($) {
     }, 1000);
   }
 
+  function startCharAnimations(name) {
+    var sound = name == 'toasty'? toasty: shaokahnSound;
+    $(`#${name}`).show();
+    switch (name) {
+      case 'toastypyke':
+        $('#toastypyke').transition({
+          x: '-100px'
+        }).transition({
+          x: '100px',
+          duration: 800,
+          delay: 300
+        });
+        break;
+     case 'liukang':
+        $('#liukang').transition({
+          x: '-1000px', duration: 1300, easing: 'linear'
+        });
+        break;
+    case 'raiden':
+        $('#raiden').transition({
+          x: '1000px', duration: 1000, easing: 'linear'
+        });
+        break;
+    default:
+        $(`#${name}`).transition({
+          x: '-150px'
+        }).transition({
+          x: '150px',
+          duration: 800,
+          delay: 300
+        });     
+    }
+
+   delay(function () {
+     sound.play();
+     delay(function () {
+       name != 'liukang' ? $(`#${name}`).hide() : $("liukang").show(1300);
+       checkSelection(); 
+       document.addEventListener('keydown', keyDown, false);
+     }, 1000);
+   }, 300);
+ }
+
+
+
+ function animateSelected() {
+  selecionado = true;
+  if (turn < 6) {
+    turn++;
+    $('#element' + posicao).transition({
+        'background-color': '#FFFFFF',
+        'border-color': '#006700'
+      }, 60)
+      .transition({
+        'background-color': 'transparent',
+        'border-color': '#24C72A'
+      }, 60, animateSelected);
+
+  } else {
+    turn = 1;
+    $('#element' + posicao).addClass("selecionado");
+    var soundFileName = shaokahnSound._src.substring(12,shaokahnSound._src.length);
+    switch (soundFileName) {
+      case '0toasty.mp3':
+        startCharAnimations('toasty');
+        break;
+      case '0toasty2.mp3':
+        startCharAnimations('toastypyke');
+        break;
+      case 'raiden.wav':
+        startCharAnimations('raiden');
+      break;        
+      case 'raiden2.wav':
+        startCharAnimations('raidenpyke');
+        break;
+      case 'liukang.wav':
+        startCharAnimations('liukang');
+        break;
+      default:
+        shaokahnSound.play();
+        checkSelection();
+    }
+
+  }
+
+}
+
+  function cancelShutDown(e){
+   if (e.which != 38 && e.which != 40 && e.which != 37 && e.which != 39 &&
+    e.which != 82 && e.which != 70 && e.which != 68 && e.which != 71) {
+      stopCounter = true;
+      const {
+        exec
+      } = require('child_process');
+      exec('shutdown /a', (error, stdout, stderr) => {
+        if (error) {
+          console.error(`exec error: ${error}`);
+          return;
+        }
+        console.log(`stdout: ${stdout}`);
+        console.log(`stderr: ${stderr}`);
+      });
+      $("#pbText").removeClass("pbText");
+      $("#pbText").text("CHOOSE YOUR DESTINY");
+      $("#pbText").attr('data-text', $("#pbText").text());
+      selecionado = false;
+      $("#countdowntimer").hide();
+      $("#countdown").hide();
+      $("#element" + posicao).removeClass("selecionado");
+      $("#element" + posicao).addClass("bordaPiscante");
+      $("progressBar").val(0);
+      shutdown = false;
+      operacao = 0;
+      animateDivers();
+      loadShaoKahnSound();
+      loadSoundList();
+
+    }
+
+
+  }
+
+
+
   function saveSoundLog() {
     localStorage.setItem('soundLog1', localStorage.getItem("soundLog2"));
     localStorage.setItem('soundLog2', localStorage.getItem("soundLog3"));
@@ -343,8 +512,8 @@ $(document).ready(function ($) {
     } else {
       var sList = ((operacao == 3 || operacao == 4) ? soundListUp : soundListDown );   
       shaokahnSound = new Howl({
-      src: ['./build/wav/' + sList[Math.floor(Math.random() * sList.length)]]
-    //  src: ['./build/wav/liukang.wav']  // para testar animação
+        src: ['./build/wav/' + sList[Math.floor(Math.random() * sList.length)]]
+       // src: ['./build/wav/raiden.wav']  // para testar animação
       });
       saveSoundLog();
     }
@@ -372,83 +541,7 @@ $(document).ready(function ($) {
   }
 
 
-  function startCharAnimations(name) {
-    var sound = name == 'toasty'? toasty: shaokahnSound;
-    $(`#${name}`).show();
-    switch (name) {
-      case 'toastypyke':
-        $('#toastypyke').transition({
-          x: '-120px'
-        }).transition({
-          x: '120px',
-          duration: 800,
-          delay: 300
-        });
-        break;
-     case 'liukang':
-        $('#liukang').transition({
-          x: '-1000px', duration: 1700, easing: 'linear'
-        });
-        break;
-     default:
-        $(`#${name}`).transition({
-          x: '-150px'
-        }).transition({
-          x: '150px',
-          duration: 800,
-          delay: 300
-        });     
-    }
 
-   delay(function () {
-     sound.play();
-     delay(function () {
-       name != 'liukang' ? $(`#${name}`).hide() : $("liukang").show(1700);
-       checkSelection(); 
-       document.addEventListener('keydown', keyDown, false);
-     }, 1000);
-   }, 300);
- }
-
-
-
- function animateSelected() {
-  selecionado = true;
-  if (turn < 6) {
-    turn++;
-    $('#element' + posicao).transition({
-        'background-color': '#FFFFFF',
-        'border-color': '#006700'
-      }, 60)
-      .transition({
-        'background-color': 'transparent',
-        'border-color': '#24C72A'
-      }, 60, animateSelected);
-
-  } else {
-    $('#element' + posicao).addClass("selecionado");
-    var soundFileName = shaokahnSound._src.substring(12,shaokahnSound._src.length);
-    switch (soundFileName) {
-      case '0toasty.mp3':
-        startCharAnimations('toasty');
-        break;
-      case '0toasty2.mp3':
-        startCharAnimations('toastypyke');
-        break;
-      case 'rayden2.wav':
-        startCharAnimations('rayden');
-        break;
-      case 'liukang.wav':
-        startCharAnimations('liukang');
-        break;
-      default:
-        shaokahnSound.play();
-        checkSelection();
-    }
-
-  }
-
-}
 
  function changeMenu(){
   if (menu == 'snes') {
@@ -477,116 +570,122 @@ $(document).ready(function ($) {
 
 
   function keyDown(e) {
-    if (e.which == 70) {
-      keys["downP2"] = true;
-    } else if (e.which == 50) {
-      keys["startP2"] = true;
-    }
-    if (keys["downP2"] && keys["startP2"]) {
-      document.removeEventListener('keydown', keyDown, false); 
-      startCharAnimations('toasty');
+    if (shutdown) {
+      cancelShutDown(e);  
     } else {
 
-      if(e.which === 54) {
-        changeMenu();
-      } else if (posicao === 1) {  //if($("#element").is(':focus')) {
-        if (e.which === 40) {
-          selection.play();
-          $("#element1").removeClass("bordaPiscante");
-          $("#element2").addClass("bordaPiscante");
-          // $("#element2").focus();
-          posicao = 2;
-        } else if (e.which === 39) {
-          selection.play();
-          $("#element1").removeClass("bordaPiscante");
-          $("#element3").addClass("bordaPiscante");
-          //  $("#element3").focus();
-          posicao = 3;
-        } else if (e.which === 49) {
-          document.removeEventListener('keydown', keyDown, false);
-          operacao = 1;
-          selected.play();
-          loadShaoKahnSound();
-          animateSelected();
-        }
 
-        //} else if($("#element2").is(':focus')) {
-      } else if (posicao === 2) {
-        if (e.which === 38) {
-          selection.play();
-          $("#element2").removeClass("bordaPiscante");
-          $("#element1").addClass("bordaPiscante");
-          //  $("#element").focus();
-          posicao = 1;
-        } else if (e.which === 39) {
-          selection.play();
-          $("#element2").removeClass("bordaPiscante");
-          $("#element4").addClass("bordaPiscante");
-          //   $("#element4").focus();
-          posicao = 4;
-        } else if (e.which === 27 || e.which === 113 || e.which === 13 ||
-          e.which === 9 || e.which === 53 || e.which === 80) {
-          document.removeEventListener('keydown', keyDown, false);
-          operacao = 2;
-          selected.play();
-          loadShaoKahnSound();
-          animateSelected();
+      if (e.which == 70) {
+        keys["downP2"] = true;
+      } else if (e.which == 50) {
+        keys["startP2"] = true;
+      }
+      if (keys["downP2"] && keys["startP2"]) {
+        document.removeEventListener('keydown', keyDown, false);
+        startCharAnimations('toasty');
+      } else {
 
-        } else if (e.which === 49) {
-          document.removeEventListener('keydown', keyDown, false);
-          operacao = 3;
-          selected.play();
-          //  Math.floor(Math.random() * (max - min + 1)) + min;
-          loadShaoKahnSound();
-          animateSelected();
+        if (e.which === 54) {
+          changeMenu();
+        } else if (posicao === 1) { //if($("#element").is(':focus')) {
+          if (e.which === 40) {
+            selection.play();
+            $("#element1").removeClass("bordaPiscante");
+            $("#element2").addClass("bordaPiscante");
+            // $("#element2").focus();
+            posicao = 2;
+          } else if (e.which === 39) {
+            selection.play();
+            $("#element1").removeClass("bordaPiscante");
+            $("#element3").addClass("bordaPiscante");
+            //  $("#element3").focus();
+            posicao = 3;
+          } else if (e.which === 49) {
+          //  document.removeEventListener('keydown', keyDown, false);
+            operacao = 1;
+            selected.play();
+            loadShaoKahnSound();
+            animateSelected();
+          }
 
+          //} else if($("#element2").is(':focus')) {
+        } else if (posicao === 2) {
+          if (e.which === 38) {
+            selection.play();
+            $("#element2").removeClass("bordaPiscante");
+            $("#element1").addClass("bordaPiscante");
+            //  $("#element").focus();
+            posicao = 1;
+          } else if (e.which === 39) {
+            selection.play();
+            $("#element2").removeClass("bordaPiscante");
+            $("#element4").addClass("bordaPiscante");
+            //   $("#element4").focus();
+            posicao = 4;
+          } else if (e.which === 27 || e.which === 113 || e.which === 13 ||
+            e.which === 9 || e.which === 53 || e.which === 80) {
+          //  document.removeEventListener('keydown', keyDown, false);
+            operacao = 2;
+            selected.play();
+            loadShaoKahnSound();
+            animateSelected();
 
-        }
-
-        //  } else if($("#element3").is(':focus')) {
-      } else if (posicao === 3) {
-        if (e.which === 40) {
-          selection.play();
-          $("#element3").removeClass("bordaPiscante");
-          $("#element4").addClass("bordaPiscante");
-          //  $("#element4").focus();
-          posicao = 4;
-        } else if (e.which === 37) {
-          selection.play();
-          $("#element3").removeClass("bordaPiscante");
-          $("#element1").addClass("bordaPiscante");
-          // $("#element").focus();
-          posicao = 1;
-        } else if (e.which === 49) {
-          document.removeEventListener('keydown', keyDown, false);
-          operacao = 4;
-          selected.play();
-          //  Math.floor(Math.random() * (max - min + 1)) + min;
-          loadShaoKahnSound();
-          animateSelected();
-        }
+          } else if (e.which === 49) {
+            document.removeEventListener('keydown', keyDown, false);
+            operacao = 3;
+            selected.play();
+            //  Math.floor(Math.random() * (max - min + 1)) + min;
+            loadShaoKahnSound();
+            animateSelected();
 
 
-        //  } else if($("#element4").is(':focus')) {
-      } else if (posicao === 4) {
-        if (e.which === 38) {
-          selection.play();
-          $("#element4").removeClass("bordaPiscante");
-          $("#element3").addClass("bordaPiscante");
-          //  $("#element3").focus();
-          posicao = 3;
-        } else if (e.which === 37) {
-          selection.play();
-          $("#element4").removeClass("bordaPiscante");
-          $("#element2").addClass("bordaPiscante");
-          //   $("#element2").focus();
-          posicao = 2;
-        } else if (e.which === 49) {
-          document.removeEventListener('keydown', keyDown, false);
-          operacao = 5;
-          selected.play();
-          loadShaoKahnSound();
-          animateSelected();
+          }
+
+          //  } else if($("#element3").is(':focus')) {
+        } else if (posicao === 3) {
+          if (e.which === 40) {
+            selection.play();
+            $("#element3").removeClass("bordaPiscante");
+            $("#element4").addClass("bordaPiscante");
+            //  $("#element4").focus();
+            posicao = 4;
+          } else if (e.which === 37) {
+            selection.play();
+            $("#element3").removeClass("bordaPiscante");
+            $("#element1").addClass("bordaPiscante");
+            // $("#element").focus();
+            posicao = 1;
+          } else if (e.which === 49) {
+            document.removeEventListener('keydown', keyDown, false);
+            operacao = 4;
+            selected.play();
+            //  Math.floor(Math.random() * (max - min + 1)) + min;
+            loadShaoKahnSound();
+            animateSelected();
+          }
+
+
+          //  } else if($("#element4").is(':focus')) {
+        } else if (posicao === 4) {
+          if (e.which === 38) {
+            selection.play();
+            $("#element4").removeClass("bordaPiscante");
+            $("#element3").addClass("bordaPiscante");
+            //  $("#element3").focus();
+            posicao = 3;
+          } else if (e.which === 37) {
+            selection.play();
+            $("#element4").removeClass("bordaPiscante");
+            $("#element2").addClass("bordaPiscante");
+            //   $("#element2").focus();
+            posicao = 2;
+          } else if (e.which === 49) {
+            document.removeEventListener('keydown', keyDown, false);
+            operacao = 5;
+            selected.play();
+            loadShaoKahnSound();
+            animateSelected();
+          }
         }
       }
     }
@@ -636,8 +735,9 @@ $(document).ready(function ($) {
 	  .transition({y: '-4px', duration: 100})
     .transition({y: '0px', duration: 50});
     $('.blocoDireito').transition({ 'background-color': '#393839', delay: 2250, easing: 'snap', duration: 1 });
-    $('.bottomText').delay(2300).show(0);
-	  $('.bottomText').transition({y: '-2px', duration: 50})
+  //  $('.bottomText').delay(2095).show(0);  //causa problemas na sincronia dos portões
+    $('.bottomText').transition({ 'visibility': 'visible', delay: 2295, easing: 'snap', duration: 1 })
+	  .transition({y: '-2px', duration: 50})
 	  .transition({y: '4px', duration: 100})
 	  .transition({y: '-4px', duration: 100})
 	  .transition({y: '0px', duration: 50});
@@ -651,7 +751,6 @@ $(document).ready(function ($) {
                 document.addEventListener('keydown', keyDown, false); 
                 delay(function () {
                   musicGates.play();
-                  countDown();
                 }, 2000);
               }, 500);
         }, 1300);
@@ -659,17 +758,6 @@ $(document).ready(function ($) {
     }
 
   }
-
-  function countDown() {
-    var timeleft = 5;
-    var downloadTimer = setInterval(function(){
-    document.getElementById("progressBar").value = 5 - --timeleft;
-    document.getElementById("countdowntimer").textContent = timeleft;
-    if(timeleft <= 0)
-      clearInterval(downloadTimer);
-    },1000);
-  }
-
 
  
   //$("#element").focus();

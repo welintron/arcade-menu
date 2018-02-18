@@ -15,21 +15,45 @@
           font-family: 'MK1'; /*a name to be used later*/
           src: url('./build/mortalkombat1.ttf'); /*URL to font*/
         }
+
+
         .bottomText {
+            position: absolute;
+            top: 430px;
+            left: 245px;
+            width: 270px;
+            z-index: 100;
+            text-align: center;
             font-family: 'MK1';
             font-size: 26px;
             color: #FFFF00;
-            position: absolute;
-            top: 434px;
-            left: 260px;
-            z-index: 4;
-            display: none;
+            visibility: hidden;
         }
+
+        .pbText {
+          background-image: -webkit-linear-gradient(#FFFF29, #FF9D29);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          position:relative;
+          text-align: center;
+        }
+        .pbText:after {
+          background: none;
+          content: attr(data-text);
+          left: 0;
+          position: absolute;
+          text-shadow: 1px 1px #420000;
+          top: 0;
+          z-index: -1;
+        }
+
+
+
         .bordaPiscante { 
-			width: 290px;
-			height: 65px;
-			border: solid 5px #24C72A;
-		}
+          width: 290px;
+          height: 65px;
+          border: solid 5px #24C72A;
+		    }
 	      .selecionado {border: solid 5px #646464 !important; background-color: #0000FF !important; opacity: 0.2 !important;}
 
         .container {
@@ -155,10 +179,10 @@
           display: none;
         }
 
-        .rayden {
+        .raidenpyke {
           position: fixed;
           bottom: 0;
-          background-image: url("raydenpyke.png");
+          background-image: url("raidenpyke.png");
           background-repeat: no-repeat;
 		      background-size: cover;
           width: 88px;
@@ -168,14 +192,28 @@
           display: none;
         }
 
+        .raiden {
+          position: fixed;
+          top: 237px;
+          background-image: url("raiden.png");
+          background-repeat: no-repeat;
+		      background-size: cover;
+          width: 300px;
+          height: 69px;
+          left: -170px;
+		      z-index: 4;
+          display: none;
+        }
+
+
         .liukang {
           position: fixed;
-          top: 195px;
+          top: 93px;
           background-image: url("liukang.gif");
           background-repeat: no-repeat;
 		      background-size: cover;
-          width: 150px;
-          height: 150px;
+          width: 220px;
+          height: 220px;
           left: 720px;
 		      z-index: 4;
           display: none;
@@ -184,15 +222,17 @@
         progress {
           -webkit-appearance: none;
           appearance: none;
+          width: 280px;
+          height: 40px;
         }
 
         progress::-webkit-progress-bar {
-          background-color: red;
-          border-style: double;
-          border-color: silver;
-          border-width: 1px;
+          background-color: black !important;
+
+          border: 5px solid transparent;
+          border-image: url(pb-border2.png) 8 round;
           background-image: 
-          -webkit-linear-gradient(darkred 2px, red, darkred);
+          -webkit-linear-gradient( darkred 2px, red, darkred);
         }
         progress::-webkit-progress-value {
           background-color: green;
@@ -204,9 +244,23 @@
                                   rgba(255, 255, 255, .25), 
                                   rgba(0, 0, 0, .25)),
           -webkit-linear-gradient(left, green, #f44); */
-
-          border-radius: 2px; 
+ 
           background-size: 35px 20px, 100% 100%, 100% 100%;
+        }
+
+        .countdown {
+          position: absolute;
+          top: 430px;
+          left: 240px;
+          z-index: 5;
+          width: 200px;
+          height: 30px;
+          font-size: 26px;
+          display: none;
+        }
+
+        #countdowntimer {
+          display: none;
         }
 
 
@@ -226,10 +280,12 @@
             <div tabindex="3" id="element4" ></div>
             <div class="toasty" id="toasty"></div>
             <div class="toastypyke" id="toastypyke"></div>
-            <div class="rayden" id="rayden"></div>
+            <div class="raiden" id="raiden"></div>
+            <div class="raidenpyke" id="raidenpyke"></div>
             <div class="liukang" id="liukang"></div>
-            <div class="bottomText" id="bottomText">CHOOSE 
-              <progress value="0" max="10" id="progressBar"><span id="countdowntimer">10 </span></progress>
+            <div class="bottomText" id="bottomText"><span id="pbText" data-text="CHOOSE YOUR DESTINY">CHOOSE YOUR DESTINY</span> <span class="pbText" data-text="5" id="countdowntimer">5</span></div>
+            <div class="countdown" id="countdown">
+              <progress value="0" max="5" id="progressBar"></progress>
             </div>
           </div>  
       </div>  

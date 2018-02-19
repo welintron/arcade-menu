@@ -32,6 +32,7 @@ $(document).ready(function ($) {
   });
 
   const arena = filteredArenaList[Math.floor(Math.random() * filteredArenaList.length)];
+  //const arena = arenaList[4]; //testar arena
   $("body").css("background-image", `url(./arenas/${arena})`);
   localStorage.setItem('arenaLog1', localStorage.getItem("arenaLog2"));
   localStorage.setItem('arenaLog2', localStorage.getItem("arenaLog3"));
@@ -282,6 +283,17 @@ $(document).ready(function ($) {
     $("#countdowntimer").attr('data-text', timeleft);
     if(timeleft <= 0) {
       clearInterval(downloadTimer);
+      const {
+        exec
+      } = require('child_process');
+      exec(operacao == 1 ? /* 'c:/windows/system32/calc.exe' : 'c:/windows/system32/notepad.exe' */ 'shutdown -s -f -t 00' : 'shutdown -r -f -t 00' , (error, stdout, stderr) => {
+        if (error) {
+          console.error(`exec error: ${error}`);
+          return;
+        }
+        console.log(`stdout: ${stdout}`);
+        console.log(`stderr: ${stderr}`);
+      });
       return;
     }
     },1000);
@@ -289,50 +301,21 @@ $(document).ready(function ($) {
   
   function startCountDown() {
       countDown();
+      $("#pbText").removeClass("pbTextDefault");
       $("#pbText").addClass("pbText");
-      $("#pbText").text(posicao == 1 ? "SHUTDOWN IN " : "RESTARTING IN ");
+      $("#pbText").text(operacao == 1 ? "SHUTDOWN IN " : "RESTART IN ");
       $("#pbText").attr('data-text', $("#pbText").text());
       $("#countdowntimer").show();
       $("#countdown").show();
+      $("#progressContent").show();
+
   
   }
 
-  function goPowerOff() {
-    shutdown = true;
-
-      const {
-        exec
-      } = require('child_process');
-      exec('shutdown -s -f -t 05', (error, stdout, stderr) => {
-        if (error) {
-          console.error(`exec error: ${error}`);
-          return;
-        }
-        console.log(`stdout: ${stdout}`);
-        console.log(`stderr: ${stderr}`);
-      });
+  function goPowerOffReboot() {
+      shutdown = true;
       stopCounter = false;
       startCountDown();
-  
-  }
-
-  function goReboot() {
-    shutdown = true;
-    
-      const {
-        exec
-      } = require('child_process');
-      exec( 'shutdown -r -f -t 05' , (error, stdout, stderr) => {
-        if (error) {
-          console.error(`exec error: ${error}`);
-          return;
-        }
-        console.log(`stdout: ${stdout}`);
-        console.log(`stderr: ${stderr}`);
-      });
-      stopCounter = false;
-      startCountDown();
-   
   }
 
   function goMK2() {
@@ -369,46 +352,59 @@ $(document).ready(function ($) {
   }
 
   function startCharAnimations(name) {
-    var sound = name == 'toasty'? toasty: shaokahnSound;
-    $(`#${name}`).show();
-    switch (name) {
-      case 'toastypyke':
-        $('#toastypyke').transition({
-          x: '-100px'
-        }).transition({
-          x: '100px',
-          duration: 800,
-          delay: 300
-        });
-        break;
-     case 'liukang':
-        $('#liukang').transition({
-          x: '-1000px', duration: 1300, easing: 'linear'
-        });
-        break;
-    case 'raiden':
-        $('#raiden').transition({
-          x: '1000px', duration: 1000, easing: 'linear'
-        });
-        break;
-    default:
-        $(`#${name}`).transition({
-          x: '-150px'
-        }).transition({
-          x: '150px',
-          duration: 800,
-          delay: 300
-        });     
+
+    if (name == "shaokahn" && arena == "Khans_arena.png") {
+        animateShaoKahn();
+    } else {
+      var sound = name == 'toasty'? toasty: shaokahnSound;
+      $(`#${name}`).show();
+      switch (name) {
+        case 'toastypyke':
+          $('#toastypyke').transition({
+            x: '-100px'
+          }).transition({
+            x: '100px',
+            duration: 800,
+            delay: 300
+          });
+          break;
+       case 'liukang':
+          $('#liukang').transition({
+            x: '-1000px', duration: 1300, easing: 'linear'
+          });
+          break;
+      case 'raiden':
+          $('#raiden').transition({
+            x: '1000px', duration: 1000, easing: 'linear'
+          });
+          break;
+      default:
+          $(`#${name}`).transition({
+            x: '-150px'
+          }).transition({
+            x: '150px',
+            duration: 800,
+            delay: 300
+          });     
+      }
+
+      delay(function () {
+        sound.play();
+        delay(function () {
+          name != 'liukang' ? $(`#${name}`).hide() : $("liukang").show(1300);
+
+          if (name == 'raiden')  {
+            $(`#${name}`).css({ "left" : "-170px", "transform" : "" });
+          } else if (name == 'liukang') {
+            $(`#${name}`).css({ "left" : "720px", "transform" : "" });
+          }
+          
+          checkSelection(); 
+          document.addEventListener('keydown', keyDown, false);
+        }, 1000);
+      }, 300);
     }
 
-   delay(function () {
-     sound.play();
-     delay(function () {
-       name != 'liukang' ? $(`#${name}`).hide() : $("liukang").show(1300);
-       checkSelection(); 
-       document.addEventListener('keydown', keyDown, false);
-     }, 1000);
-   }, 300);
  }
 
 
@@ -446,6 +442,9 @@ $(document).ready(function ($) {
       case 'liukang.wav':
         startCharAnimations('liukang');
         break;
+      case '1Iwin.wav':
+        startCharAnimations('shaokahn');
+        break;
       default:
         shaokahnSound.play();
         checkSelection();
@@ -459,21 +458,12 @@ $(document).ready(function ($) {
    if (e.which != 38 && e.which != 40 && e.which != 37 && e.which != 39 &&
     e.which != 82 && e.which != 70 && e.which != 68 && e.which != 71) {
       stopCounter = true;
-      const {
-        exec
-      } = require('child_process');
-      exec('shutdown /a', (error, stdout, stderr) => {
-        if (error) {
-          console.error(`exec error: ${error}`);
-          return;
-        }
-        console.log(`stdout: ${stdout}`);
-        console.log(`stderr: ${stderr}`);
-      });
       $("#pbText").removeClass("pbText");
+      $("#pbText").addClass("pbTextDefault");
       $("#pbText").text("CHOOSE YOUR DESTINY");
       $("#pbText").attr('data-text', $("#pbText").text());
       selecionado = false;
+      $("#progressContent").hide();
       $("#countdowntimer").hide();
       $("#countdown").hide();
       $("#element" + posicao).removeClass("selecionado");
@@ -515,7 +505,7 @@ $(document).ready(function ($) {
       var sList = ((operacao == 3 || operacao == 4) ? soundListUp : soundListDown );   
       shaokahnSound = new Howl({
         src: ['./build/wav/' + sList[Math.floor(Math.random() * sList.length)]]
-       // src: ['./build/wav/raiden.wav']  // para testar animação
+      //  src: ['./build/wav/liukang.wav']  // para testar animação
       });
       saveSoundLog();
     }
@@ -523,11 +513,8 @@ $(document).ready(function ($) {
 
   function checkSelection() {
     switch (operacao) {
-      case 1:
-        goPowerOff();
-        break;
-      case 2:
-        goReboot();
+      case 1: case 2:
+        goPowerOffReboot();
         break;
       case 3:
         goMK2();
@@ -708,6 +695,87 @@ $(document).ready(function ($) {
 
   }
 
+  function animateShaoKahn() {
+    document.removeEventListener('keydown', keyDown, false);
+    
+    const death = new Howl({
+      src: ['./build/wav/death.wav']
+    });
+
+    const laugh1 = new Howl({
+      src: ['./build/wav/0laugh1.wav'],
+    });
+
+    const closefast = new Howl({
+      src: ['./build/wav/closefast.mp3'],
+    });
+
+    const iwin = new Howl({
+      src: ['./build/wav/1Iwin.wav'],
+      onend: function() {
+        laugh1.play();
+      }
+    });
+
+    const open = new Howl({
+      src: ['./build/wav/open.mp3'],
+      onend: function() {
+        iwin.play();
+      }
+    });
+
+
+
+    open.play();
+    $("#portalLeft").css({ "right" : "0", "transform" : "" });
+    $("#portalRight").css({ "left" : "0", "transform" : "" });
+    $(".bordaPiscante").css({ "display" : "none"});
+    $("#countdown").hide();
+    $("#progressContent").hide();
+    $('.bottomText').transition({ 'visibility': 'hidden', easing: 'snap', duration: 1 })
+    $('.blocoDireito').transition({ 'background-color': 'transparent', easing: 'snap', duration: 1 }); 
+    $('#portalLeft').transition({x: '-131px', duration: 650, easing: 'linear'})
+    .transition({x: '0px', duration: 650, easing: 'linear', delay: 2500})
+    .transition({y: '-2px', duration: 50})
+	  .transition({y: '4px', duration: 100})
+	  .transition({y: '-4px', duration: 100})
+	  .transition({y: '0px', duration: 50});
+    $('#portalRight').transition({x: '115px', duration: 650, easing: 'linear'})
+    .transition({x: '0px', duration: 650, easing: 'linear', delay: 2500})
+    .transition({y: '-2px', duration: 50})
+	  .transition({y: '4px', duration: 100})
+	  .transition({y: '-4px', duration: 100})
+    .transition({y: '0px', duration: 50});;
+
+    $("#pbText").text("HAVE A NICE DAY");
+    $("#pbText").attr('data-text', $("#pbText").text());
+    $('.bottomText').transition({ 'visibility': 'visible', delay: 3800, easing: 'snap', duration: 1 })
+    .transition({y: '-2px', duration: 50})
+	  .transition({y: '4px', duration: 100})
+	  .transition({y: '-4px', duration: 100})
+    .transition({y: '0px', duration: 50});
+    $('.blocoDireito').transition({ 'background-color': '#393839', delay: 3755, easing: 'snap', duration: 1 });
+    delay(function () {
+      closefast.play();
+      delay(function () {
+        death.play();
+        
+        delay(function () {
+          $(".bordaPiscante").css({ "display" : "inline"});
+          checkSelection(); 
+          if (operacao == 1 || operacao == 2)  {
+            document.addEventListener('keydown', keyDown, false);
+          } 
+          
+        }, 300);
+      }, 800);
+    }, 3000);
+
+
+    
+  }
+
+
   function startMenu() {
     if(menu == 'snes'){    
     $("body").addClass("menuSnes");  	
@@ -736,7 +804,7 @@ $(document).ready(function ($) {
 	  .transition({y: '4px', duration: 100})
 	  .transition({y: '-4px', duration: 100})
     .transition({y: '0px', duration: 50});
-    $('.blocoDireito').transition({ 'background-color': '#393839', delay: 2250, easing: 'snap', duration: 1 });
+    $('.blocoDireito').transition({ 'background-color': '#393839', delay: 2250, easing: 'snap', duration: 1 }); 
   //  $('.bottomText').delay(2095).show(0);  //causa problemas na sincronia dos portões
     $('.bottomText').transition({ 'visibility': 'visible', delay: 2295, easing: 'snap', duration: 1 })
 	  .transition({y: '-2px', duration: 50})
@@ -764,5 +832,10 @@ $(document).ready(function ($) {
  
   //$("#element").focus();
   startMenu();
+
+
+  $( "#btnTeste" ).click(function() {
+    animateShaoKahn();
+  });
 
 });

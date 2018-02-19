@@ -26,7 +26,6 @@
             text-align: center;
             font-family: 'MK1';
             font-size: 26px;
-            color: #FFFF00;
             visibility: hidden;
         }
 
@@ -45,6 +44,13 @@
           text-shadow: 1px 1px #420000;
           top: 0;
           z-index: -1;
+        }
+
+        .pbTextDefault {
+          color: #FFFF00;
+          text-shadow: 2px 2px black;
+          top: 3px;
+          position: relative;
         }
 
 
@@ -162,7 +168,7 @@
           width: 128px;
           height: 128px;
           left: 720px;
-		      z-index: 4;
+		      z-index: 101;
           display: none;
         }
 
@@ -175,7 +181,7 @@
           width: 105px;
           height: 140px;
           left: 720px;
-		      z-index: 4;
+		      z-index: 101;
           display: none;
         }
 
@@ -188,7 +194,7 @@
           width: 88px;
           height: 140px;
           left: 720px;
-		      z-index: 4;
+		      z-index: 101;
           display: none;
         }
 
@@ -201,7 +207,7 @@
           width: 300px;
           height: 69px;
           left: -170px;
-		      z-index: 4;
+		      z-index: 101;
           display: none;
         }
 
@@ -215,7 +221,7 @@
           width: 220px;
           height: 220px;
           left: 720px;
-		      z-index: 4;
+		      z-index: 101;
           display: none;
         }
 
@@ -227,12 +233,10 @@
         }
 
         progress::-webkit-progress-bar {
-          background-color: black !important;
-
+          background-color: transparent !important;
           border: 5px solid transparent;
           border-image: url(pb-border2.png) 8 round;
-          background-image: 
-          -webkit-linear-gradient( darkred 2px, red, darkred);
+
         }
         progress::-webkit-progress-value {
           background-color: green;
@@ -246,6 +250,18 @@
           -webkit-linear-gradient(left, green, #f44); */
  
           background-size: 35px 20px, 100% 100%, 100% 100%;
+        }
+
+        .progressContent {
+          background-image: 
+          -webkit-linear-gradient(darkred 2px, red, darkred);
+          width: 271px;
+          height: 34px;
+          z-index: 4;
+          position: absolute;
+          top: 434px;
+          left: 245px;
+          display: none;
         }
 
         .countdown {
@@ -263,6 +279,11 @@
           display: none;
         }
 
+
+        #btnTeste{
+          position: absolute;
+          z-index: 4;
+        }
 
       </style>  
        
@@ -283,10 +304,12 @@
             <div class="raiden" id="raiden"></div>
             <div class="raidenpyke" id="raidenpyke"></div>
             <div class="liukang" id="liukang"></div>
-            <div class="bottomText" id="bottomText"><span id="pbText" data-text="CHOOSE YOUR DESTINY">CHOOSE YOUR DESTINY</span> <span class="pbText" data-text="5" id="countdowntimer">5</span></div>
+            <div class="bottomText" id="bottomText"><span id="pbText" class="pbTextDefault" data-text="CHOOSE YOUR DESTINY">CHOOSE YOUR DESTINY</span> <span class="pbText" data-text="5" id="countdowntimer">5</span></div>
             <div class="countdown" id="countdown">
               <progress value="5" max="5" id="progressBar"></progress>
             </div>
+            <div id="progressContent" class="progressContent"></div>
+            <!-- <button type="button" id="btnTeste" class="btn">Shao Kahn</button> -->
           </div>  
       </div>  
 

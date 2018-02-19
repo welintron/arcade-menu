@@ -473,8 +473,9 @@ $(document).ready(function ($) {
       shutdown = false;
       operacao = 0;
       animateDivers();
-      loadShaoKahnSound();
       loadSoundList();
+      loadShaoKahnSound();
+      
 
     }
 

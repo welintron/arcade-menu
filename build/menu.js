@@ -356,6 +356,7 @@ $(document).ready(function ($) {
     if (name == "shaokahn" && arena == "Khans_arena.png") {
         animateShaoKahn();
     } else {
+      document.removeEventListener('keydown', keyDown, false);
       var sound = name == 'toasty'? toasty: shaokahnSound;
       $(`#${name}`).show();
       switch (name) {

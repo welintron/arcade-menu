@@ -305,6 +305,7 @@ $(document).ready(function ($) {
       $("#pbText").addClass("pbText");
       $("#pbText").text(operacao == 1 ? "SHUTDOWN IN " : "RESTART IN ");
       $("#pbText").attr('data-text', $("#pbText").text());
+      $('.bottomText').transition({ 'visibility': 'visible', easing: 'snap', duration: 1 });
       $("#countdowntimer").show();
       $("#countdown").show();
       $("#progressContent").show();
@@ -395,7 +396,7 @@ $(document).ready(function ($) {
           name != 'liukang' ? $(`#${name}`).hide() : $("liukang").show(1300);
 
           if (name == 'raiden')  {
-            $(`#${name}`).css({ "left" : "-170px", "transform" : "" });
+            $(`#${name}`).css({ "left" : "-300px", "transform" : "" });
           } else if (name == 'liukang') {
             $(`#${name}`).css({ "left" : "720px", "transform" : "" });
           }
@@ -444,8 +445,10 @@ $(document).ready(function ($) {
         startCharAnimations('liukang');
         break;
       case '1Iwin.wav':
-        startCharAnimations('shaokahn');
-        break;
+        if (menu == "default") {
+          startCharAnimations('shaokahn');
+          break;
+        }
       default:
         shaokahnSound.play();
         checkSelection();
@@ -459,10 +462,14 @@ $(document).ready(function ($) {
    if (e.which != 38 && e.which != 40 && e.which != 37 && e.which != 39 &&
     e.which != 82 && e.which != 70 && e.which != 68 && e.which != 71) {
       stopCounter = true;
-      $("#pbText").removeClass("pbText");
-      $("#pbText").addClass("pbTextDefault");
-      $("#pbText").text("CHOOSE YOUR DESTINY");
-      $("#pbText").attr('data-text', $("#pbText").text());
+      if (menu == 'snes') {
+        $('.bottomText').transition({ 'visibility': 'hidden', easing: 'snap', duration: 1 });
+      } else {
+        $("#pbText").removeClass("pbText");
+        $("#pbText").addClass("pbTextDefault");
+        $("#pbText").text("CHOOSE YOUR DESTINY");
+        $("#pbText").attr('data-text', $("#pbText").text());
+      }
       selecionado = false;
       $("#progressContent").hide();
       $("#countdowntimer").hide();
@@ -470,6 +477,8 @@ $(document).ready(function ($) {
       $("#element" + posicao).removeClass("selecionado");
       $("#element" + posicao).addClass("bordaPiscante");
       $("progressBar").val(0);
+
+
       shutdown = false;
       operacao = 0;
       animateDivers();
@@ -507,7 +516,7 @@ $(document).ready(function ($) {
       var sList = ((operacao == 3 || operacao == 4) ? soundListUp : soundListDown );   
       shaokahnSound = new Howl({
         src: ['./build/wav/' + sList[Math.floor(Math.random() * sList.length)]]
-      //  src: ['./build/wav/liukang.wav']  // para testar animação
+      //  src: ['./build/wav/raiden.wav']  // para testar animação
       });
       saveSoundLog();
     }
@@ -536,7 +545,7 @@ $(document).ready(function ($) {
 
  function changeMenu(){
   if (menu == 'snes') {
-    menu = 'arcade';
+    menu = 'default';
   } else {
     menu = 'snes';
   }

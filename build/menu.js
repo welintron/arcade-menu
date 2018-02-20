@@ -353,11 +353,10 @@ $(document).ready(function ($) {
   }
 
   function startCharAnimations(name) {
-
+    document.removeEventListener('keydown', keyDown, false);
     if (name == "shaokahn" && arena == "Khans_arena.png") {
         animateShaoKahn();
     } else {
-      document.removeEventListener('keydown', keyDown, false);
       var sound = name == 'toasty'? toasty: shaokahnSound;
       $(`#${name}`).show();
       switch (name) {
@@ -581,7 +580,6 @@ $(document).ready(function ($) {
         keys["startP2"] = true;
       }
       if (keys["downP2"] && keys["startP2"]) {
-        document.removeEventListener('keydown', keyDown, false);
         startCharAnimations('toasty');
       } else {
 
@@ -707,7 +705,6 @@ $(document).ready(function ($) {
   }
 
   function animateShaoKahn() {
-    document.removeEventListener('keydown', keyDown, false);
     
     const death = new Howl({
       src: ['./build/wav/death.wav']
@@ -805,19 +802,19 @@ $(document).ready(function ($) {
       $("#element4").css({'left': '399px'});        
       $('#portalRight').show();
       $('#portalLeft').show();
-      $('#portalRight').transition({x: '-381px', duration: 1500, delay: 800, easing: 'linear'})
+      $('#portalRight').transition({x: '-381px', duration: 1500, delay: 1800, easing: 'linear'})
 	  .transition({y: '-2px', duration: 50})
 	  .transition({y: '4px', duration: 100})
 	  .transition({y: '-4px', duration: 100})
 	  .transition({y: '0px', duration: 50});
-      $('#portalLeft').transition({x: '381px', duration: 1500, delay: 800, easing: 'linear'})
+      $('#portalLeft').transition({x: '381px', duration: 1500, delay: 1800, easing: 'linear'})
 	  .transition({y: '-2px', duration: 50})
 	  .transition({y: '4px', duration: 100})
 	  .transition({y: '-4px', duration: 100})
     .transition({y: '0px', duration: 50});
-    $('.blocoDireito').transition({ 'background-color': '#393839', delay: 2250, easing: 'snap', duration: 1 }); 
+    $('.blocoDireito').transition({ 'background-color': '#393839', delay: 3250, easing: 'snap', duration: 1 }); 
   //  $('.bottomText').delay(2095).show(0);  //causa problemas na sincronia dos portões
-    $('.bottomText').transition({ 'visibility': 'visible', delay: 2295, easing: 'snap', duration: 1 })
+    $('.bottomText').transition({ 'visibility': 'visible', delay: 3295, easing: 'snap', duration: 1 })
 	  .transition({y: '-2px', duration: 50})
 	  .transition({y: '4px', duration: 100})
 	  .transition({y: '-4px', duration: 100})
@@ -835,7 +832,7 @@ $(document).ready(function ($) {
                 }, 2000);
               }, 500);
         }, 1300);
-      }, 800);
+      }, 1800);
     }
 
   }

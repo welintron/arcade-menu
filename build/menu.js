@@ -150,7 +150,7 @@ $(document).ready(function ($) {
   });
 
   const gates = new Howl({
-    src: ['./build/wav/menu-mugen2.mp3']
+    src: ['./build/wav/menu-mugen3.mp3']
   });
   
   const musicGates = new Howl({
@@ -376,7 +376,7 @@ $(document).ready(function ($) {
           break;
       case 'raiden':
           $('#raiden').transition({
-            x: '1000px', duration: 1000, easing: 'linear'
+            x: '1030px', duration: 1000, easing: 'linear'
           });
           break;
       default:
@@ -392,7 +392,7 @@ $(document).ready(function ($) {
       delay(function () {
         sound.play();
         delay(function () {
-          name != 'liukang' ? $(`#${name}`).hide() : $("liukang").show(1300);
+          $(`#${name}`).hide();
 
           if (name == 'raiden')  {
             $(`#${name}`).css({ "left" : "-300px", "transform" : "" });
@@ -514,8 +514,8 @@ $(document).ready(function ($) {
     } else {
       var sList = ((operacao == 3 || operacao == 4) ? soundListUp : soundListDown );   
       shaokahnSound = new Howl({
-        src: ['./build/wav/' + sList[Math.floor(Math.random() * sList.length)]]
-      //  src: ['./build/wav/raiden.wav']  // para testar animação
+      //  src: ['./build/wav/' + sList[Math.floor(Math.random() * sList.length)]]
+        src: ['./build/wav/raiden.wav']  // para testar animação
       });
       saveSoundLog();
     }
@@ -802,19 +802,19 @@ $(document).ready(function ($) {
       $("#element4").css({'left': '399px'});        
       $('#portalRight').show();
       $('#portalLeft').show();
-      $('#portalRight').transition({x: '-381px', duration: 1500, delay: 1800, easing: 'linear'})
+      $('#portalRight').transition({x: '-381px', duration: 1300, delay: 1800, easing: 'linear'})
 	  .transition({y: '-2px', duration: 50})
 	  .transition({y: '4px', duration: 100})
 	  .transition({y: '-4px', duration: 100})
 	  .transition({y: '0px', duration: 50});
-      $('#portalLeft').transition({x: '381px', duration: 1500, delay: 1800, easing: 'linear'})
+      $('#portalLeft').transition({x: '381px', duration: 1300, delay: 1800, easing: 'linear'})
 	  .transition({y: '-2px', duration: 50})
 	  .transition({y: '4px', duration: 100})
 	  .transition({y: '-4px', duration: 100})
     .transition({y: '0px', duration: 50});
-    $('.blocoDireito').transition({ 'background-color': '#393839', delay: 3250, easing: 'snap', duration: 1 }); 
+    $('.blocoDireito').transition({ 'background-color': '#393839', delay: 3050, easing: 'snap', duration: 1 }); 
   //  $('.bottomText').delay(2095).show(0);  //causa problemas na sincronia dos portões
-    $('.bottomText').transition({ 'visibility': 'visible', delay: 3295, easing: 'snap', duration: 1 })
+    $('.bottomText').transition({ 'visibility': 'visible', delay: 3095, easing: 'snap', duration: 1 })
 	  .transition({y: '-2px', duration: 50})
 	  .transition({y: '4px', duration: 100})
 	  .transition({y: '-4px', duration: 100})

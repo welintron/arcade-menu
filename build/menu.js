@@ -46,6 +46,10 @@ $(document).ready(function ($) {
     '1weakpathetic.mp3',
     '1youarenothing.mp3',
     '1Iwin.wav',
+    '1stilltriyngtowin.mp3',
+    '1thatwaspathetic.mp3',
+    '1youwillneverwin.mp3',
+    '1yousuck.mp3',
     '0laugh1.wav',
     '0laugh2.wav',
     '0laugh3.wav',
@@ -131,6 +135,10 @@ $(document).ready(function ($) {
   });
   const selected = new Howl({
     src: ['./build/wav/selected.wav']
+  });
+
+  const cancel = new Howl({
+    src: ['./build/wav/whoa.wav']
   });
 
   const toasty = new Howl({
@@ -477,7 +485,7 @@ $(document).ready(function ($) {
       $("#element" + posicao).addClass("bordaPiscante");
       $("progressBar").val(0);
 
-
+      cancel.play();
       shutdown = false;
       operacao = 0;
       animateDivers();
@@ -514,8 +522,8 @@ $(document).ready(function ($) {
     } else {
       var sList = ((operacao == 3 || operacao == 4) ? soundListUp : soundListDown );   
       shaokahnSound = new Howl({
-      //  src: ['./build/wav/' + sList[Math.floor(Math.random() * sList.length)]]
-        src: ['./build/wav/raiden.wav']  // para testar animação
+        src: ['./build/wav/' + sList[Math.floor(Math.random() * sList.length)]]
+      //  src: ['./build/wav/raiden.wav']  // para testar animação
       });
       saveSoundLog();
     }

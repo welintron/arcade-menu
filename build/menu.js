@@ -578,6 +578,7 @@ $(document).ready(function ($) {
 
 
   function keyDown(e) {
+    if (e.repeat) { return }
     if (shutdown) {
       cancelShutDown(e);  
     } else {

@@ -308,6 +308,7 @@ $(document).ready(function ($) {
   }
   
   function startCountDown() {
+      document.addEventListener('keydown', keyDown, false);
       countDown();
       $("#pbText").removeClass("pbTextDefault");
       $("#pbText").addClass("pbText");
@@ -361,7 +362,6 @@ $(document).ready(function ($) {
   }
 
   function startCharAnimations(name) {
-    document.removeEventListener('keydown', keyDown, false);
     if (name == "shaokahn" && arena == "Khans_arena.png") {
         animateShaoKahn();
     } else {
@@ -419,6 +419,7 @@ $(document).ready(function ($) {
 
 
  function animateSelected() {
+  document.removeEventListener('keydown', keyDown, false); 
   selecionado = true;
   if (turn < 6) {
     turn++;

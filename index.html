@@ -263,7 +263,7 @@
 
         .progressContent {
           background-image: 
-          -webkit-linear-gradient(darkred 2px, red, darkred);
+          -webkit-linear-gradient(#520000 3px, #C70000 2px, #420000 30px);
           width: 271px;
           height: 34px;
           z-index: 4;
@@ -293,6 +293,18 @@
           position: absolute;
           z-index: 4;
         }
+
+        #cancel{
+          position: absolute;
+          width: 720px;
+          height: 480px;
+          top: 0;
+          background-image: url("mk2cancel.png");
+          background-repeat: no-repeat;
+          visibility: hidden;
+          z-index: 2;
+        }   
+        
 
   </style>
 </head>
@@ -342,6 +354,7 @@
         </div>
         <div class="progressContent"
              id="progressContent"></div><!-- <button type="button" id="btnTeste" class="btn">Shao Kahn</button> -->
+        <div id="cancel"></div>     
       </div>
     </div>
   </div>

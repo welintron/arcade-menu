@@ -294,7 +294,7 @@ $(document).ready(function ($) {
       const {
         exec
       } = require('child_process');
-      exec(operacao == 1 ? /* 'c:/windows/system32/calc.exe' : 'c:/windows/system32/notepad.exe' */ 'shutdown -s -f -t 00' : 'shutdown -r -f -t 00' , (error, stdout, stderr) => {
+      exec(operacao == 1 ? 'c:/windows/system32/calc.exe' : 'c:/windows/system32/notepad.exe' /* 'shutdown -s -f -t 00' : 'shutdown -r -f -t 00' */ , (error, stdout, stderr) => {
         if (error) {
           console.error(`exec error: ${error}`);
           return;
@@ -309,6 +309,12 @@ $(document).ready(function ($) {
   
   function startCountDown() {
       document.addEventListener('keydown', keyDown, false);
+      if (menu == "default" ) {
+        $(".bordaPiscante").css({ "display" : "none"});
+        $("#cancel").transition({ 'visibility': 'visible', easing: 'ease', duration: 500 });
+        
+
+      }
       countDown();
       $("#pbText").removeClass("pbTextDefault");
       $("#pbText").addClass("pbText");
@@ -477,6 +483,8 @@ $(document).ready(function ($) {
         $("#pbText").addClass("pbTextDefault");
         $("#pbText").text("CHOOSE YOUR DESTINY");
         $("#pbText").attr('data-text', $("#pbText").text());
+        $("#cancel").transition({ 'visibility': 'hidden', easing: 'snap', duration: 1 });
+        $(".bordaPiscante").css({ "display" : "inline"});
       }
       selecionado = false;
       $("#progressContent").hide();

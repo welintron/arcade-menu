@@ -336,7 +336,6 @@ $(document).ready(function ($) {
 
   function goMK2() {
     delay(function () {
-      //  $("body").addClass("blackBg");
       findKillExplorerProcess();
       delay(function () {
         runStartupScript();
@@ -649,6 +648,8 @@ $(document).ready(function ($) {
           } else if (e.which === 49) {
             document.removeEventListener('keydown', keyDown, false);
             operacao = 3;
+            $("#pbText").text("STARTING MK II...");
+            $("#pbText").attr('data-text', $("#pbText").text());
             selected.play();
             //  Math.floor(Math.random() * (max - min + 1)) + min;
             loadShaoKahnSound();

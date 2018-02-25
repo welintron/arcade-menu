@@ -19,6 +19,11 @@
           src: url('./build/mortalkombat1.ttf'); /*URL to font*/
         }
 
+        @font-face {
+          font-family: 'MK2'; /*a name to be used later*/
+          src: url('./build/mk2.ttf'); /*URL to font*/
+        }
+
 
         .bottomText {
             position: absolute;
@@ -38,6 +43,8 @@
           -webkit-text-fill-color: transparent;
           position:relative;
           text-align: center;
+          font-size: 28px !important;
+          font-family: 'MK2' !important;
         }
         .pbText:after {
           background: none;
@@ -299,12 +306,33 @@
           width: 720px;
           height: 480px;
           top: 0;
-          background-image: url("mk2cancel.png");
           background-repeat: no-repeat;
+          background-image: url("mk2cancel1.png");
           visibility: hidden;
           z-index: 2;
         }   
-        
+
+       .cancelPowerOff{
+          background-image: url("mk2cancel.png") !important;
+        }
+
+       .cancelRestart{
+          background-image: url("mk2cancel2.png") !important;
+        }
+
+       #countdownCenter{
+        position: absolute;
+        top: 320px;
+        left: 185px;
+        width: 30px;
+        height: 45px;
+        color: #FF0000;
+        text-align: center;
+        font-family: 'MK1';
+        font-size: 43px;
+        z-index: 2;
+        text-shadow: 3px 3px #000000;
+        }            
 
   </style>
 </head>
@@ -354,7 +382,7 @@
         </div>
         <div class="progressContent"
              id="progressContent"></div><!-- <button type="button" id="btnTeste" class="btn">Shao Kahn</button> -->
-        <div id="cancel"></div>     
+        <div id="cancel"><span data-text="5" id="countdownCenter">5</span></div>      
       </div>
     </div>
   </div>

@@ -4,6 +4,7 @@ $(document).ready(function ($) {
   var selecionado = false;
   var shutdown = false;
   var stopCounter = false;
+  var cancelType = 1;
   var operacao = 0;
   var keys = {
     downP2: false,
@@ -276,11 +277,15 @@ $(document).ready(function ($) {
 
   function countDown() {
     var timeleft = 5;
+    $("#countdownCenter").text("5");
+    $("#countdownCenter").attr('data-text', $("#countdownCenter").text());
     var downloadTimer = setInterval(function(){
       if (stopCounter == true) {
         document.getElementById("progressBar").value = 5;
         document.getElementById("countdowntimer").textContent = 5;
+        document.getElementById("countdownCenter").textContent = 5;
         $("#countdowntimer").attr('data-text', 5);
+        $("#countdownCenter").attr('data-text', 5);
         clearInterval(downloadTimer);
         return;
       }
@@ -288,8 +293,13 @@ $(document).ready(function ($) {
  //   document.getElementById("progressBar").value = 5 - --timeleft;  //barra progressiva
     document.getElementById("progressBar").value  = --timeleft;
     document.getElementById("countdowntimer").textContent = timeleft;
+    document.getElementById("countdownCenter").textContent = timeleft;
     $("#countdowntimer").attr('data-text', timeleft);
+    $("#countdownCenter").attr('data-text', timeleft);
     if(timeleft <= 0) {
+      $("#pbText").text(operacao == 1 ? "SHUTTING DOWN..." : "RESTARTING OS...");
+      $("#pbText").attr('data-text', $("#pbText").text()); 
+      $("#countdowntimer").hide();    
       clearInterval(downloadTimer);
       const {
         exec
@@ -311,19 +321,30 @@ $(document).ready(function ($) {
       document.addEventListener('keydown', keyDown, false);
       if (menu == "default" ) {
         $(".bordaPiscante").css({ "display" : "none"});
-        $("#cancel").transition({ 'visibility': 'visible', easing: 'ease', duration: 500 });
+        
         
 
       }
       countDown();
-      $("#pbText").removeClass("pbTextDefault");
-      $("#pbText").addClass("pbText");
-      $("#pbText").text(operacao == 1 ? "SHUTDOWN IN " : "RESTART IN ");
-      $("#pbText").attr('data-text', $("#pbText").text());
+      if(cancelType == 2) {
+        $("#pbText").removeClass("pbTextDefault");
+        $("#pbText").addClass("pbText");
+        $("#pbText").text(operacao == 1 ? "SHUTDOWN IN " : "RESTART IN ");
+        $("#pbText").attr('data-text', $("#pbText").text());
+        $("#countdowntimer").show();
+        $("#countdown").show();
+        $("#progressContent").show();
+        $("#countdownCenter").hide();
+
+      } else {
+        $("#cancel").addClass(operacao == 1 ? "cancelPowerOff" : "cancelRestart" );
+        $("#countdownCenter").show();
+        animateCountDown();
+      }
+
+      $("#cancel").transition({ 'visibility': 'visible', easing: 'ease', duration: 500 });
       $('.bottomText').transition({ 'visibility': 'visible', easing: 'snap', duration: 1 });
-      $("#countdowntimer").show();
-      $("#countdown").show();
-      $("#progressContent").show();
+
 
   
   }
@@ -471,6 +492,104 @@ $(document).ready(function ($) {
 
 }
 
+function animateDivers() {
+  if (!selecionado) {
+    $('#element' + posicao).transition({
+      'border-color': '#007B00'  /* '#006700' */
+    }, 80).transition({
+      'border-color': '#24C72A'  /* '#00FF00' */
+    }, 80, animateDivers);
+  }
+
+}
+
+function animateCountDown() {
+    $('#countdownCenter').transition({
+      'color': '#FFFFFF', easing: 'snap', duration: 90  
+    }).transition({
+      'color': '#FF0000', easing: 'snap', duration: 90
+    }, animateCountDown);
+
+}
+
+function animateShaoKahn() {
+  
+  const death = new Howl({
+    src: ['./build/wav/death.wav']
+  });
+
+  const laugh1 = new Howl({
+    src: ['./build/wav/0laugh1.wav'],
+  });
+
+  const closefast = new Howl({
+    src: ['./build/wav/closefast.mp3'],
+  });
+
+  const iwin = new Howl({
+    src: ['./build/wav/1Iwin.wav'],
+    onend: function() {
+      laugh1.play();
+    }
+  });
+
+  const open = new Howl({
+    src: ['./build/wav/open.mp3'],
+    onend: function() {
+      iwin.play();
+    }
+  });
+
+
+
+  open.play();
+  $("#portalLeft").css({ "right" : "0", "transform" : "" });
+  $("#portalRight").css({ "left" : "0", "transform" : "" });
+  $(".bordaPiscante").css({ "display" : "none"});
+  $("#countdown").hide();
+  $("#progressContent").hide();
+  $('.bottomText').transition({ 'visibility': 'hidden', easing: 'snap', duration: 1 })
+  $('.blocoDireito').transition({ 'background-color': 'transparent', easing: 'snap', duration: 1 }); 
+  $('#portalLeft').transition({x: '-131px', duration: 650, easing: 'linear'})
+  .transition({x: '0px', duration: 650, easing: 'linear', delay: 2500})
+  .transition({y: '-2px', duration: 50})
+  .transition({y: '4px', duration: 100})
+  .transition({y: '-4px', duration: 100})
+  .transition({y: '0px', duration: 50});
+  $('#portalRight').transition({x: '115px', duration: 650, easing: 'linear'})
+  .transition({x: '0px', duration: 650, easing: 'linear', delay: 2500})
+  .transition({y: '-2px', duration: 50})
+  .transition({y: '4px', duration: 100})
+  .transition({y: '-4px', duration: 100})
+  .transition({y: '0px', duration: 50});;
+
+  $("#pbText").text("HAVE A NICE DAY");
+  $("#pbText").attr('data-text', $("#pbText").text());
+  $('.bottomText').transition({ 'visibility': 'visible', delay: 3800, easing: 'snap', duration: 1 })
+  .transition({y: '-2px', duration: 50})
+  .transition({y: '4px', duration: 100})
+  .transition({y: '-4px', duration: 100})
+  .transition({y: '0px', duration: 50});
+  $('.blocoDireito').transition({ 'background-color': '#393839', delay: 3755, easing: 'snap', duration: 1 });
+  delay(function () {
+    closefast.play();
+    delay(function () {
+      death.play();
+      
+      delay(function () {
+        $(".bordaPiscante").css({ "display" : "inline"});
+        checkSelection(); 
+        if (operacao == 1 || operacao == 2)  {
+          document.addEventListener('keydown', keyDown, false);
+        } 
+        
+      }, 300);
+    }, 800);
+  }, 3000);
+
+  
+}
+
   function cancelShutDown(e){
    if (e.which != 38 && e.which != 40 && e.which != 37 && e.which != 39 &&
     e.which != 82 && e.which != 70 && e.which != 68 && e.which != 71) {
@@ -492,6 +611,7 @@ $(document).ready(function ($) {
       $("#element" + posicao).removeClass("selecionado");
       $("#element" + posicao).addClass("bordaPiscante");
       $("progressBar").val(0);
+
 
       cancel.play();
       shutdown = false;
@@ -712,95 +832,7 @@ $(document).ready(function ($) {
    document.addEventListener("keydown", keyDown);
 
 
-  function animateDivers() {
-    if (!selecionado) {
-      $('#element' + posicao).transition({
-        'border-color': '#007B00'  /* '#006700' */
-      }, 80).transition({
-        'border-color': '#24C72A'  /* '#00FF00' */
-      }, 80, animateDivers);
-    }
 
-  }
-
-  function animateShaoKahn() {
-    
-    const death = new Howl({
-      src: ['./build/wav/death.wav']
-    });
-
-    const laugh1 = new Howl({
-      src: ['./build/wav/0laugh1.wav'],
-    });
-
-    const closefast = new Howl({
-      src: ['./build/wav/closefast.mp3'],
-    });
-
-    const iwin = new Howl({
-      src: ['./build/wav/1Iwin.wav'],
-      onend: function() {
-        laugh1.play();
-      }
-    });
-
-    const open = new Howl({
-      src: ['./build/wav/open.mp3'],
-      onend: function() {
-        iwin.play();
-      }
-    });
-
-
-
-    open.play();
-    $("#portalLeft").css({ "right" : "0", "transform" : "" });
-    $("#portalRight").css({ "left" : "0", "transform" : "" });
-    $(".bordaPiscante").css({ "display" : "none"});
-    $("#countdown").hide();
-    $("#progressContent").hide();
-    $('.bottomText').transition({ 'visibility': 'hidden', easing: 'snap', duration: 1 })
-    $('.blocoDireito').transition({ 'background-color': 'transparent', easing: 'snap', duration: 1 }); 
-    $('#portalLeft').transition({x: '-131px', duration: 650, easing: 'linear'})
-    .transition({x: '0px', duration: 650, easing: 'linear', delay: 2500})
-    .transition({y: '-2px', duration: 50})
-	  .transition({y: '4px', duration: 100})
-	  .transition({y: '-4px', duration: 100})
-	  .transition({y: '0px', duration: 50});
-    $('#portalRight').transition({x: '115px', duration: 650, easing: 'linear'})
-    .transition({x: '0px', duration: 650, easing: 'linear', delay: 2500})
-    .transition({y: '-2px', duration: 50})
-	  .transition({y: '4px', duration: 100})
-	  .transition({y: '-4px', duration: 100})
-    .transition({y: '0px', duration: 50});;
-
-    $("#pbText").text("HAVE A NICE DAY");
-    $("#pbText").attr('data-text', $("#pbText").text());
-    $('.bottomText').transition({ 'visibility': 'visible', delay: 3800, easing: 'snap', duration: 1 })
-    .transition({y: '-2px', duration: 50})
-	  .transition({y: '4px', duration: 100})
-	  .transition({y: '-4px', duration: 100})
-    .transition({y: '0px', duration: 50});
-    $('.blocoDireito').transition({ 'background-color': '#393839', delay: 3755, easing: 'snap', duration: 1 });
-    delay(function () {
-      closefast.play();
-      delay(function () {
-        death.play();
-        
-        delay(function () {
-          $(".bordaPiscante").css({ "display" : "inline"});
-          checkSelection(); 
-          if (operacao == 1 || operacao == 2)  {
-            document.addEventListener('keydown', keyDown, false);
-          } 
-          
-        }, 300);
-      }, 800);
-    }, 3000);
-
-
-    
-  }
 
 
   function startMenu() {

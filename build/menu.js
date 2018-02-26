@@ -4,7 +4,7 @@ $(document).ready(function ($) {
   var selecionado = false;
   var shutdown = false;
   var stopCounter = false;
-  var cancelType = 2;
+  var cancelType = 1;
   var operacao = 0;
   var keys = {
     downP2: false,
@@ -346,7 +346,7 @@ $(document).ready(function ($) {
         $("#cancel").addClass( "cancelType1");
       } else {
         $("#countdownCenter").show();
-        $("#pbText").text(operacao == 1 ? "SHUTTING DOWN..." : "RESTARTING...");
+        $("#pbText").text(operacao == 1 ? "SHUTTING DOWN..." : "RESTARTING OS...");
         $("#pbText").attr('data-text', $("#pbText").text());
         $("#cancel").removeClass( "cancelType1");
         $("#cancel").removeClass( "cancelPowerOff");

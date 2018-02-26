@@ -308,7 +308,7 @@ $(document).ready(function ($) {
       const {
         exec
       } = require('child_process');
-      exec(operacao == 1 ? 'c:/windows/system32/calc.exe' : 'c:/windows/system32/notepad.exe' /* 'shutdown -s -f -t 00' : 'shutdown -r -f -t 00' */ , (error, stdout, stderr) => {
+      exec(operacao == 1 ? /* 'c:/windows/system32/calc.exe' : 'c:/windows/system32/notepad.exe' */ 'shutdown -s -f -t 00' : 'shutdown -r -f -t 00' , (error, stdout, stderr) => {
         if (error) {
           console.error(`exec error: ${error}`);
           return;

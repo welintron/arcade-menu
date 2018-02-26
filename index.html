@@ -27,10 +27,10 @@
 
         .bottomText {
             position: absolute;
-            top: 430px;
+            top: 435px;
             left: 245px;
             width: 270px;
-            z-index: 100;
+            z-index: -1;
             text-align: center;
             font-family: 'MK1';
             font-size: 26px;
@@ -42,6 +42,7 @@
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           position:relative;
+          top: -4px;
           text-align: center;
           font-size: 28px !important;
           font-family: 'MK2' !important;
@@ -51,7 +52,7 @@
           content: attr(data-text);
           left: 0;
           position: absolute;
-          text-shadow: 1px 1px #420000;
+          text-shadow: 1px -2px #420000;
           top: 0;
           z-index: -1;
         }
@@ -59,7 +60,7 @@
         .pbTextDefault {
           color: #FFFF00;
           text-shadow: 2px 2px black;
-          top: 3px;
+          top: -2px;
           position: relative;
         }
 
@@ -164,7 +165,7 @@
             overflow: hidden !important; 
             float: left; 
             position: fixed; 
-            z-index: 2; 
+            z-index: -7; 
         } 
           
         .blocoDireito { 
@@ -172,7 +173,7 @@
             overflow: hidden !important; 
             float: right; 
             position: fixed; 
-            z-index: 1; 
+            z-index: -8; 
         } 
 
         .toasty {
@@ -241,21 +242,21 @@
           display: none;
         }
 
-        progress {
+        #progressBar progress {
           -webkit-appearance: none;
           appearance: none;
           width: 280px;
-          height: 40px;
+          height: 31px;
         }
 
-        progress::-webkit-progress-bar {
+        #progressBar progress::-webkit-progress-bar {
           background-color: transparent !important;
           border: 5px solid transparent;
           border-image: url(pb-border2.png) 8 round;
 
         }
-        progress::-webkit-progress-value {
-          background-color: green;
+        #progressBar progress::-webkit-progress-value {
+          background-color: transparent;
   /*           background-image:
           -webkit-linear-gradient(-45deg, 
                                   transparent 33%, rgba(0, 0, 0, .1) 33%, 
@@ -264,27 +265,55 @@
                                   rgba(255, 255, 255, .25), 
                                   rgba(0, 0, 0, .25)),
           -webkit-linear-gradient(left, green, #f44); */
+          z-index: 5;
+          background-size: 35px 20px, 100% 100%, 100% 100%;
+        }
 
+        #progressBar {
+          z-index: 6;
+        }
+
+        #progressTop {
+          position: relative;
+          top: -41px;
+          z-index: -2;
+          left: -1px;
+        }
+
+        #progressTop progress {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 281px;
+          height: 31px;
+        }
+
+        #progressTop progress::-webkit-progress-bar {
+          background-color: transparent !important;
+          border: 5px solid transparent;
+
+        }
+        #progressTop progress::-webkit-progress-value {
+          background-color: green;
+          z-index: 5;
           background-size: 35px 20px, 100% 100%, 100% 100%;
         }
 
         .progressContent {
-          background-image: 
-          -webkit-linear-gradient(#520000 3px, #C70000 2px, #420000 30px);
+          background-image: -webkit-linear-gradient(#520000 3px, #C70000 5px, #420000 30px);
           width: 271px;
-          height: 34px;
-          z-index: 4;
+          height: 26px;
+          z-index: -3;
           position: absolute;
-          top: 434px;
+          top: 438px;
           left: 245px;
           display: none;
         }
 
         .countdown {
           position: absolute;
-          top: 430px;
+          top: 435px;
           left: 240px;
-          z-index: 5;
+         /*  z-index: 5; */
           width: 200px;
           height: 30px;
           font-size: 26px;
@@ -318,6 +347,10 @@
 
        .cancelRestart{
           background-image: url("mk2cancel2.png") !important;
+        }
+
+        .cancelType1{
+          background-image: url("mk2cancel1.png") !important;
         }
 
        #countdownCenter{
@@ -376,9 +409,8 @@
         </div>
         <div class="countdown"
              id="countdown">
-          <progress id="progressBar"
-               max="5"
-               value="5"></progress>
+          <div id="progressBar"><progress id= "pBar" max="5" value="5"></progress> </div>    
+          <div id="progressTop"><progress id= "pTop" max="5" value="5"></progress> </div>         
         </div>
         <div class="progressContent"
              id="progressContent"></div><!-- <button type="button" id="btnTeste" class="btn">Shao Kahn</button> -->

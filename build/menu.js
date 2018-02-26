@@ -4,7 +4,7 @@ $(document).ready(function ($) {
   var selecionado = false;
   var shutdown = false;
   var stopCounter = false;
-  var cancelType = 1;
+  var cancelType = 2;
   var operacao = 0;
   var keys = {
     downP2: false,
@@ -278,10 +278,13 @@ $(document).ready(function ($) {
   function countDown() {
     var timeleft = 5;
     $("#countdownCenter").text("5");
-    $("#countdownCenter").attr('data-text', $("#countdownCenter").text());
+    $("#countdownCenter").attr('data-text', $("#countdowntimer").text());
+    $("#countdowntimer").text("5");
+    $("#countdowntimer").attr('data-text', $("#countdowntimer").text());
+    document.getElementById("pTop").value = 5;
     var downloadTimer = setInterval(function(){
       if (stopCounter == true) {
-        document.getElementById("progressBar").value = 5;
+        document.getElementById("pTop").value = 5;
         document.getElementById("countdowntimer").textContent = 5;
         document.getElementById("countdownCenter").textContent = 5;
         $("#countdowntimer").attr('data-text', 5);
@@ -291,20 +294,21 @@ $(document).ready(function ($) {
       }
 
  //   document.getElementById("progressBar").value = 5 - --timeleft;  //barra progressiva
-    document.getElementById("progressBar").value  = --timeleft;
+    document.getElementById("pTop").value  = --timeleft;
     document.getElementById("countdowntimer").textContent = timeleft;
     document.getElementById("countdownCenter").textContent = timeleft;
     $("#countdowntimer").attr('data-text', timeleft);
     $("#countdownCenter").attr('data-text', timeleft);
     if(timeleft <= 0) {
       $("#pbText").text(operacao == 1 ? "SHUTTING DOWN..." : "RESTARTING OS...");
+      $('.bottomText').transition({ 'visibility': 'visible', easing: 'snap', duration: 1 });
       $("#pbText").attr('data-text', $("#pbText").text()); 
       $("#countdowntimer").hide();    
       clearInterval(downloadTimer);
       const {
         exec
       } = require('child_process');
-      exec(operacao == 1 ? /* 'c:/windows/system32/calc.exe' : 'c:/windows/system32/notepad.exe' */ 'shutdown -s -f -t 00' : 'shutdown -r -f -t 00' , (error, stdout, stderr) => {
+      exec(operacao == 1 ? 'c:/windows/system32/calc.exe' : 'c:/windows/system32/notepad.exe' /* 'shutdown -s -f -t 00' : 'shutdown -r -f -t 00' */ , (error, stdout, stderr) => {
         if (error) {
           console.error(`exec error: ${error}`);
           return;
@@ -326,25 +330,39 @@ $(document).ready(function ($) {
 
       }
       countDown();
-      if(cancelType == 2) {
-        $("#pbText").removeClass("pbTextDefault");
-        $("#pbText").addClass("pbText");
+      $("#countdown").show();
+      $("#progressContent").show();
+
+      $("#pbText").removeClass("pbTextDefault");
+      $("#pbText").addClass("pbText");
+      $('.bottomText').transition({ 'visibility': 'visible', easing: 'snap', duration: 1 });
+      if(cancelType == 2 || menu == 'snes') {
         $("#pbText").text(operacao == 1 ? "SHUTDOWN IN " : "RESTART IN ");
         $("#pbText").attr('data-text', $("#pbText").text());
         $("#countdowntimer").show();
-        $("#countdown").show();
-        $("#progressContent").show();
-        $("#countdownCenter").hide();
-
+        $("#countdownCenter").hide(); 
+        $("#cancel").removeClass( "cancelPowerOff");
+        $("#cancel").removeClass( "cancelRestart");
+        $("#cancel").addClass( "cancelType1");
       } else {
-        $("#cancel").addClass(operacao == 1 ? "cancelPowerOff" : "cancelRestart" );
         $("#countdownCenter").show();
-        animateCountDown();
+        $("#pbText").text(operacao == 1 ? "SHUTTING DOWN..." : "RESTARTING...");
+        $("#pbText").attr('data-text', $("#pbText").text());
+        $("#cancel").removeClass( "cancelType1");
+        $("#cancel").removeClass( "cancelPowerOff");
+        $("#cancel").removeClass( "cancelRestart");
+        $("#cancel").addClass(operacao == 1 ? "cancelPowerOff" : "cancelRestart" );
       }
 
-      $("#cancel").transition({ 'visibility': 'visible', easing: 'ease', duration: 500 });
-      $('.bottomText').transition({ 'visibility': 'visible', easing: 'snap', duration: 1 });
+      $("#cancel").transition({ 'visibility': (menu == 'default' ? 'visible' : 'hidden') , easing: 'ease', duration: 500 });
 
+      if (menu == 'snes') {
+        $('.bottomText').css({ "top" : "402px"});
+        $('.countdown').css({ "top" : "402px"});
+        $('.progressContent').css({ "top" : "405px"});
+      } else{
+        animateCountDown();
+      }
 
   
   }
@@ -594,23 +612,25 @@ function animateShaoKahn() {
    if (e.which != 38 && e.which != 40 && e.which != 37 && e.which != 39 &&
     e.which != 82 && e.which != 70 && e.which != 68 && e.which != 71) {
       stopCounter = true;
-      if (menu == 'snes') {
-        $('.bottomText').transition({ 'visibility': 'hidden', easing: 'snap', duration: 1 });
-      } else {
-        $("#pbText").removeClass("pbText");
-        $("#pbText").addClass("pbTextDefault");
-        $("#pbText").text("CHOOSE YOUR DESTINY");
-        $("#pbText").attr('data-text', $("#pbText").text());
         $("#cancel").transition({ 'visibility': 'hidden', easing: 'snap', duration: 1 });
         $(".bordaPiscante").css({ "display" : "inline"});
-      }
+        $('.bottomText').transition({ 'visibility': (menu == 'default' ? 'visible' : 'hidden' ), easing: 'snap', duration: 1 });
+        if (menu != 'snes') {
+          $("#pbText").text("CHOOSE YOUR DESTINY");
+          $("#pbText").removeClass("pbText");
+          $("#pbText").addClass("pbTextDefault");
+          $("#pbText").attr('data-text', $("#pbText").text());
+        }
+        
+        
+
       selecionado = false;
       $("#progressContent").hide();
       $("#countdowntimer").hide();
       $("#countdown").hide();
       $("#element" + posicao).removeClass("selecionado");
       $("#element" + posicao).addClass("bordaPiscante");
-      $("progressBar").val(0);
+      $("pTop").val(0);
 
 
       cancel.play();
@@ -717,6 +737,7 @@ function animateShaoKahn() {
         keys["startP2"] = true;
       }
       if (keys["downP2"] && keys["startP2"]) {
+        cancelType = cancelType == 1 ? 2 : 1;
         startCharAnimations('toasty');
       } else {
 
@@ -768,8 +789,19 @@ function animateShaoKahn() {
           } else if (e.which === 49) {
             document.removeEventListener('keydown', keyDown, false);
             operacao = 3;
+
             $("#pbText").text("STARTING MK II...");
             $("#pbText").attr('data-text', $("#pbText").text());
+
+            if (menu == 'snes') {
+              $('.bottomText').css({ "top" : "402px"});
+              $(".bottomText").css({'visibility': 'visible'});
+              if ($("#pbText").hasClass("pbText")) {
+                $("#pbText").removeClass("pbText");
+                $("#pbText").addClass("pbTextDefault");
+              }
+            }
+
             selected.play();
             //  Math.floor(Math.random() * (max - min + 1)) + min;
             loadShaoKahnSound();
@@ -795,6 +827,19 @@ function animateShaoKahn() {
           } else if (e.which === 49) {
             document.removeEventListener('keydown', keyDown, false);
             operacao = 4;
+
+            $("#pbText").text("STARTING HYPERSPIN...");
+            $("#pbText").attr('data-text', $("#pbText").text());
+
+            if (menu == 'snes') {
+              $('.bottomText').css({ "top" : "402px"});
+              $(".bottomText").css({'visibility': 'visible'});
+              if ($("#pbText").hasClass("pbText")) {
+                $("#pbText").removeClass("pbText");
+                $("#pbText").addClass("pbTextDefault");
+              }
+            }
+
             selected.play();
             //  Math.floor(Math.random() * (max - min + 1)) + min;
             loadShaoKahnSound();
@@ -819,6 +864,19 @@ function animateShaoKahn() {
           } else if (e.which === 49) {
             document.removeEventListener('keydown', keyDown, false);
             operacao = 5;
+            $("#pbText").text("STARTING WINDOWS...");
+            $("#pbText").attr('data-text', $("#pbText").text());
+
+            if (menu == 'snes') {
+              $('.bottomText').css({ "top" : "402px"});
+              $(".bottomText").css({'visibility': 'visible'});
+
+              if ($("#pbText").hasClass("pbText")) {
+                $("#pbText").removeClass("pbText");
+                $("#pbText").addClass("pbTextDefault");
+              }
+            }
+
             selected.play();
             loadShaoKahnSound();
             animateSelected();

@@ -1,263 +1,277 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8">
   <title>Mortal Kombat II Menu</title>
-  <link href="./build/bootstrap.min.css"
-        rel="stylesheet">
-  <link href="./build/jquery-ui.min.css"
-        rel="stylesheet">
+  <link href="./build/bootstrap.min.css" rel="stylesheet">
+  <link href="./build/jquery-ui.min.css" rel="stylesheet">
   <script>
-  window.$ = window.jQuery = require("./build/jquery.min.js");
-       require("./build/jquery-ui.min.js");
-       require("./build/bootstrap.min.js");
+    window.$ = window.jQuery = require("./build/jquery.min.js");
+    require("./build/jquery-ui.min.js");
+    require("./build/bootstrap.min.js");
   </script>
   <style>
-        * {cursor: none;}
-        @font-face {
-          font-family: 'MK1'; /*a name to be used later*/
-          src: url('./build/mortalkombat1.ttf'); /*URL to font*/
-        }
+    * {
+      cursor: none;
+    }
 
-        @font-face {
-          font-family: 'MK2'; /*a name to be used later*/
-          src: url('./build/mk2.ttf'); /*URL to font*/
-        }
+    @font-face {
+      font-family: 'MK1';
+      /*a name to be used later*/
+      src: url('./build/mortalkombat1.ttf');
+      /*URL to font*/
+    }
 
-
-        .bottomText {
-            position: absolute;
-            top: 435px;
-            left: 245px;
-            width: 270px;
-            z-index: -1;
-            text-align: center;
-            font-family: 'MK1';
-            font-size: 26px;
-            visibility: hidden;
-        }
-
-        .pbText {
-          background-image: -webkit-linear-gradient(#FFFF29, #FF9D29);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          position:relative;
-          top: -4px;
-          text-align: center;
-          font-size: 28px !important;
-          font-family: 'MK2' !important;
-        }
-        .pbText:after {
-          background: none;
-          content: attr(data-text);
-          left: 0;
-          position: absolute;
-          text-shadow: 1px -2px #420000;
-          top: 0;
-          z-index: -1;
-        }
-
-        .pbTextDefault {
-          color: #FFFF00;
-          text-shadow: 2px 2px black;
-          top: -2px;
-          position: relative;
-        }
+    @font-face {
+      font-family: 'MK2';
+      /*a name to be used later*/
+      src: url('./build/mk2.ttf');
+      /*URL to font*/
+    }
 
 
+    .bottomText {
+      position: absolute;
+      top: 467px;
+      left: 141px;
+      width: 270px;
+      z-index: -1;
+      text-align: center;
+      font-family: 'MK1';
+      font-size: 21px;
+      visibility: hidden;
+    }
 
-        .bordaPiscante { 
-          width: 290px;
-          height: 65px;
-          border: solid 5px #24C72A;
-                    }
-              .selecionado {border: solid 5px #646464 !important; background-color: #0000FF !important; opacity: 0.2 !important;}
+    .pbText {
+      background-image: -webkit-linear-gradient(#FFFF29, #FF9D29);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      position: relative;
+      top: -4px;
+      text-align: center;
+      font-size: 23px !important;
+      font-family: 'MK2' !important;
+    }
 
-        .container {
-          margin: 0;
-          padding: 0;
-        }
+    .pbText:after {
+      background: none;
+      content: attr(data-text);
+      left: 0;
+      position: absolute;
+      text-shadow: 1px -2px #420000;
+      top: 0;
+      z-index: -1;
+    }
 
-        #element1 {
-          position: absolute;
-          top: 186px;
-          left: 69px;
-                      z-index: 4;  
-        }
-        #element2 {
-          position: absolute;
-          top: 287px;
-          left: 69px;
-                      z-index: 4;                 
-        }
-
-        #element3 {
-          position: absolute;
-          top: 186px;
-          left: 395px;
-                      z-index: 4;
-        }
-
-        #element4 {
-          position: absolute;
-          top: 287px;
-          left: 395px;
-                      z-index: 4;
-        }
+    .pbTextDefault {
+      color: #FFFF00;
+      text-shadow: 2px 2px black;
+      top: -2px;
+      position: relative;
+    }
 
 
 
-        body {
-            background-color: black;
-            background-repeat: no-repeat;
-            -moz-background-size: 720px 480px;
-            -webkit-background-size: 720px 480px;
-            background-size: 720px 480px;
-            overflow: hidden;
-        }
+    .bordaPiscante {
+      width: 210px;
+      height: 70px;
+      border: solid 6px #24C72A;
+    }
 
-        .blackBg {
-            background-image: none !important; 
-            background-color: black !important;
-        }    
+    .selecionado {
+      border: solid 5px #646464 !important;
+      background-color: #0000FF !important;
+      opacity: 0.2 !important;
+    }
 
-        .portalClosed {
-          background-image: url(mk2bg.png) !important; 
-        }
+    .container {
+      margin: 0;
+      padding: 0;
+    }
 
-        .menuSnes {
-          background-image: url(mk2bg2.png) !important; 
-        }
+    #element1 {
+      position: absolute;
+      top: 199px;
+      left: 52px;
+      z-index: 4;
+    }
 
-        .portalRight { 
-            position: relative; 
-            top: 0; 
-            background-image: url("mk2right.png"); 
-            background-repeat: no-repeat; 
-            background-size: cover; 
-            width: 720px; 
-            height: 480px; 
-            left: 381px; 
-            display: none; 
-            -webkit-backface-visibility: hidden;
-            -webkit-transition: translate3d(0,0,0);
-            -webkit-perspective: 1000;
-        } 
-          
-        .portalLeft { 
-            position: relative; 
-            top: 0; 
-            background-image: url("mk2left.png"); 
-            background-repeat: no-repeat; 
-            background-size: cover; 
-            width: 720px; 
-            height: 480px; 
-            right: 381px;  
-            display: none; 
-            -webkit-backface-visibility: hidden;
-            -webkit-transition: translate3d(0,0,0);
-            -webkit-perspective: 1000;
-        } 
-          
-   
-        .blocoEsquerdo { 
-            width: 366px; 
-            overflow: hidden !important; 
-            float: left; 
-            position: fixed; 
-            z-index: -7; 
-        } 
-          
-        .blocoDireito { 
-            width: 720px; 
-            overflow: hidden !important; 
-            float: right; 
-            position: fixed; 
-            z-index: -8; 
-        } 
+    #element2 {
+      position: absolute;
+      top: 306px;
+      left: 52px;
+      z-index: 4;
+    }
 
-        .toasty {
-          position: fixed;
-          bottom: 0;
-          background-image: url("toasty.png");
-          background-repeat: no-repeat;
-                      background-size: cover;
-          width: 128px;
-          height: 128px;
-          left: 720px;
-                      z-index: 101;
-          display: none;
-        }
+    #element3 {
+      position: absolute;
+      top: 199px;
+      left: 282px;
+      z-index: 4;
+    }
 
-        .toastypyke {
-          position: fixed;
-          bottom: 0;
-          background-image: url("pyke.png");
-          background-repeat: no-repeat;
-                      background-size: cover;
-          width: 105px;
-          height: 140px;
-          left: 720px;
-                      z-index: 101;
-          display: none;
-        }
-
-        .raidenpyke {
-          position: fixed;
-          bottom: 0;
-          background-image: url("raidenpyke.png");
-          background-repeat: no-repeat;
-                      background-size: cover;
-          width: 88px;
-          height: 140px;
-          left: 720px;
-                      z-index: 101;
-          display: none;
-        }
-
-        .raiden {
-          position: fixed;
-          top: 237px;
-          background-image: url("raiden.png");
-          background-repeat: no-repeat;
-                      background-size: cover;
-          width: 300px;
-          height: 69px;
-          left: -300px;
-                      z-index: 101;
-          display: none;
-        }
+    #element4 {
+      position: absolute;
+      top: 306px;
+      left: 282px;
+      z-index: 4;
+    }
 
 
-        .liukang {
-          position: fixed;
-          top: 93px;
-          background-image: url("liukang.gif");
-          background-repeat: no-repeat;
-                      background-size: cover;
-          width: 220px;
-          height: 220px;
-          left: 720px;
-                      z-index: 101;
-          display: none;
-        }
 
-        #progressBar progress {
-          -webkit-appearance: none;
-          appearance: none;
-          width: 280px;
-          height: 31px;
-        }
+    body {
+      background-color: black;
+      background-repeat: no-repeat;
+      -moz-background-size: 512px 512px;
+      -webkit-background-size: 512px 512px;
+      background-size: 512px 512px;
+      overflow: hidden;
+    }
 
-        #progressBar progress::-webkit-progress-bar {
-          background-color: transparent !important;
-          border: 5px solid transparent;
-          border-image: url(pb-border2.png) 8 round;
+    .blackBg {
+      background-image: none !important;
+      background-color: black !important;
+    }
 
-        }
-        #progressBar progress::-webkit-progress-value {
-          background-color: transparent;
-  /*           background-image:
+    .portalClosed {
+      background-image: url(mk2bg.png) !important;
+    }
+
+    .menuSnes {
+      background-image: url(mk2bg2.png) !important;
+    }
+
+    .portalRight {
+      position: relative;
+      top: 0;
+      background-image: url("mk2right.png");
+      background-repeat: no-repeat;
+      background-size: cover;
+      width: 512px;
+      height: 512px;
+      left: 381px;
+      display: none;
+      -webkit-backface-visibility: hidden;
+      -webkit-transition: translate3d(0, 0, 0);
+      -webkit-perspective: 1000;
+    }
+
+    .portalLeft {
+      position: relative;
+      top: 0;
+      background-image: url("mk2left.png");
+      background-repeat: no-repeat;
+      background-size: cover;
+      width: 512px;
+      height: 512px;
+      right: 381px;
+      display: none;
+      -webkit-backface-visibility: hidden;
+      -webkit-transition: translate3d(0, 0, 0);
+      -webkit-perspective: 1000;
+    }
+
+
+    .blocoEsquerdo {
+      width: 260px;
+      overflow: hidden !important;
+      float: left;
+      position: fixed;
+      z-index: -7;
+    }
+
+    .blocoDireito {
+      width: 512px;
+      overflow: hidden !important;
+      float: right;
+      position: fixed;
+      z-index: -8;
+    }
+
+    .toasty {
+      position: fixed;
+      bottom: 0;
+      background-image: url("toasty.png");
+      background-repeat: no-repeat;
+      background-size: cover;
+      width: 141px;
+      height: 188px;
+      left: 512px;
+      z-index: 101;
+      display: none;
+    }
+
+    .toastypyke {
+      position: fixed;
+      bottom: 0;
+      background-image: url("pyke.png");
+      background-repeat: no-repeat;
+      background-size: cover;
+      width: 141px;
+      height: 188px;
+      left: 512px;
+      z-index: 101;
+      display: none;
+    }
+
+    .raidenpyke {
+      position: fixed;
+      bottom: 0;
+      background-image: url("raidenpyke.png");
+      background-repeat: no-repeat;
+      background-size: cover;
+      width: 141px;
+      height: 188px;
+      left: 512px;
+      z-index: 101;
+      display: none;
+    }
+
+    .raiden {
+      position: fixed;
+      top: 237px;
+      background-image: url("raiden.png");
+      background-repeat: no-repeat;
+      background-size: cover;
+      width: 218px;
+      height: 79px;
+      left: -218px;
+      z-index: 101;
+      display: none;
+    }
+
+
+    .liukang {
+      position: fixed;
+      top: 93px;
+      background-image: url("liukang.gif");
+      background-repeat: no-repeat;
+      background-size: cover;
+      width: 180px;
+      height: 240px;
+      left: 512px;
+      z-index: 101;
+      display: none;
+    }
+
+    #progressBar progress {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 209px;
+      height: 30px;
+  }
+
+    #progressBar progress::-webkit-progress-bar {
+      background-color: transparent !important;
+      border: 5px solid transparent;
+      border-image: url(pb-border2.png) 8 round;
+
+    }
+
+    #progressBar progress::-webkit-progress-value {
+      background-color: transparent;
+      /*           background-image:
           -webkit-linear-gradient(-45deg, 
                                   transparent 33%, rgba(0, 0, 0, .1) 33%, 
                                   rgba(0,0, 0, .1) 66%, transparent 99%),
@@ -265,180 +279,163 @@
                                   rgba(255, 255, 255, .25), 
                                   rgba(0, 0, 0, .25)),
           -webkit-linear-gradient(left, green, #f44); */
-          z-index: 5;
-          background-size: 35px 20px, 100% 100%, 100% 100%;
-        }
+      z-index: 5;
+      background-size: 35px 20px, 100% 100%, 100% 100%;
+    }
 
-        #progressBar {
-          z-index: 6;
-        }
+    #progressBar {
+      z-index: 6;
+    }
 
-        #progressTop {
-          position: relative;
-          top: -41px;
-          z-index: -2;
-          left: -1px;
-        }
+    #progressTop {
+      position: relative;
+      top: -43px;
+      z-index: -2;
+      left: -1px;
+  }
 
-        #progressTop progress {
-          -webkit-appearance: none;
-          appearance: none;
-          width: 281px;
-          height: 31px;
-        }
+  #progressTop progress {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 212px;
+    height: 34px;
+}
 
-        #progressTop progress::-webkit-progress-bar {
-          background-color: transparent !important;
-          border: 5px solid transparent;
+    #progressTop progress::-webkit-progress-bar {
+      background-color: transparent !important;
+      border: 5px solid transparent;
 
-        }
-        #progressTop progress::-webkit-progress-value {
-          background-color: green;
-          z-index: 5;
-          background-size: 35px 20px, 100% 100%, 100% 100%;
-        }
+    }
 
-        .progressContent {
-          background-image: -webkit-linear-gradient(#520000 3px, #C70000 5px, #420000 30px);
-          width: 271px;
-          height: 26px;
-          z-index: -3;
-          position: absolute;
-          top: 438px;
-          left: 245px;
-          display: none;
-        }
+    #progressTop progress::-webkit-progress-value {
+      background-color: green;
+      z-index: 5;
+      background-size: 35px 20px, 100% 100%, 100% 100%;
+    }
 
-        .countdown {
-          position: absolute;
-          top: 435px;
-          left: 240px;
-         /*  z-index: 5; */
-          width: 200px;
-          height: 30px;
-          font-size: 26px;
-          display: none;
-        }
+    .progressContent {
+      background-image: -webkit-linear-gradient(#520000 3px, #C70000 5px, #420000 30px);
+      width: 203px;
+      height: 23px;
+      z-index: -3;
+      position: absolute;
+      top: 468px;
+      left: 173px;
+      display: none; 
+  }
 
-        #countdowntimer {
-          display: none;
-        }
+  .countdown {
+    position: absolute;
+    top: 464px;
+    left: 171px;
+    /* z-index: 5; */
+    width: 206px;
+    height: 40px;
+    font-size: 26px;
+    display: none;
+}
+
+    #countdowntimer {
+      display: none;
+    }
 
 
-        #btnTeste{
-          position: absolute;
-          z-index: 4;
-        }
+    #btnTeste {
+      position: absolute;
+      z-index: 4;
+    }
 
-        #cancel{
-          position: absolute;
-          width: 720px;
-          height: 480px;
-          top: 0;
-          background-repeat: no-repeat;
-          background-image: url("mk2cancel1.png");
-          visibility: hidden;
-          z-index: 2;
-        }   
+    #cancel {
+      position: absolute;
+      width: 512px;
+      height: 512px;
+      top: 0;
+      background-repeat: no-repeat;
+      background-image: url("mk2cancel1.png");
+      visibility: hidden;
+      z-index: 2;
+    }
 
-       .cancelPowerOff{
-          background-image: url("mk2cancel.png") !important;
-        }
+    .cancelPowerOff {
+      background-image: url("mk2cancel.png") !important;
+    }
 
-       .cancelRestart{
-          background-image: url("mk2cancel2.png") !important;
-        }
+    .cancelRestart {
+      background-image: url("mk2cancel2.png") !important;
+    }
 
-        .cancelType1{
-          background-image: url("mk2cancel1.png") !important;
-        }
+    .cancelType1 {
+      background-image: url("mk2cancel1.png") !important;
+    }
 
-       #countdownCenter{
-        position: absolute;
-        top: 320px;
-        left: 185px;
-        width: 30px;
-        height: 45px;
-        color: #FF0000;
-        text-align: center;
-        font-family: 'MK1';
-        font-size: 43px;
-        z-index: 2;
-        text-shadow: 3px 3px #000000;
-        }            
-
+    #countdownCenter {
+      position: absolute;
+      top: 337px;
+      left: 130px;
+      width: 30px;
+      height: 45px;
+      color: #FF0000;
+      text-align: center;
+      font-family: 'MK1';
+      font-size: 43px;
+      z-index: 2;
+      text-shadow: 3px 3px #000000;
+    }
   </style>
 </head>
+
 <body>
   <div class="container">
     <div class="row">
       <div class="col-md-12">
         <div class="blocoEsquerdo">
-          <div class="portalLeft"
-               id="portalLeft"></div>
+          <div class="portalLeft" id="portalLeft"></div>
         </div>
         <div class="blocoDireito">
-          <div class="portalRight"
-               id="portalRight"></div>
+          <div class="portalRight" id="portalRight"></div>
         </div>
-        <div id="element1"
-             tabindex="0"></div>
-        <div id="element2"
-             tabindex="1"></div>
-        <div id="element3"
-             tabindex="2"></div>
-        <div id="element4"
-             tabindex="3"></div>
-        <div class="toasty"
-             id="toasty"></div>
-        <div class="toastypyke"
-             id="toastypyke"></div>
-        <div class="raiden"
-             id="raiden"></div>
-        <div class="raidenpyke"
-             id="raidenpyke"></div>
-        <div class="liukang"
-             id="liukang"></div>
-        <div class="bottomText"
-             id="bottomText">
-          <span class="pbTextDefault"
-               data-text="CHOOSE YOUR DESTINY"
-               id="pbText">CHOOSE YOUR DESTINY</span> <span class="pbText"
-               data-text="5"
-               id="countdowntimer">5</span>
+        <div id="element1" tabindex="0"></div>
+        <div id="element2" tabindex="1"></div>
+        <div id="element3" tabindex="2"></div>
+        <div id="element4" tabindex="3"></div>
+        <div class="toasty" id="toasty"></div>
+        <div class="toastypyke" id="toastypyke"></div>
+        <div class="raiden" id="raiden"></div>
+        <div class="raidenpyke" id="raidenpyke"></div>
+        <div class="liukang" id="liukang"></div>
+        <div class="bottomText" id="bottomText">
+          <span class="pbTextDefault" data-text="CHOOSE YOUR DESTINY" id="pbText">CHOOSE YOUR DESTINY</span>
+          <span class="pbText" data-text="5" id="countdowntimer">5</span>
         </div>
-        <div class="countdown"
-             id="countdown">
-          <div id="progressBar"><progress id= "pBar" max="5" value="5"></progress> </div>    
-          <div id="progressTop"><progress id= "pTop" max="5" value="5"></progress> </div>         
+        <div class="countdown" id="countdown">
+          <div id="progressBar">
+            <progress id="pBar" max="5" value="5"></progress>
+          </div>
+          <div id="progressTop">
+            <progress id="pTop" max="5" value="5"></progress>
+          </div>
         </div>
-        <div class="progressContent"
-             id="progressContent"></div><!-- <button type="button" id="btnTeste" class="btn">Shao Kahn</button> -->
-        <div id="cancel"><span data-text="5" id="countdownCenter">5</span></div>      
+        <div class="progressContent" id="progressContent"></div>
+        <!-- <button type="button" id="btnTeste" class="btn">Shao Kahn</button> -->
+        <div id="cancel">
+          <span data-text="5" id="countdownCenter">5</span>
+        </div>
       </div>
     </div>
   </div>
-  <script src="./build/jquery.transit.min.js"
-        type="text/javascript"></script> 
-  <script src="./build/howler.min.js"
-        type="text/javascript"></script> 
-  <script src="./build/menu.js"
-        type="text/javascript"></script> 
+  <script src="./build/jquery.transit.min.js" type="text/javascript"></script>
+  <script src="./build/howler.min.js" type="text/javascript"></script>
+  <script src="./build/menu.js" type="text/javascript"></script>
   <script>
-
-
-
-
-
-
-          const remote = require('electron').remote;
-          document.addEventListener("keydown", function (e) {
-            if (e.which === 123) {
-              remote.getCurrentWindow().toggleDevTools();
-            } else if (e.which === 116) {
-              location.reload();
-            }
-          });
+    const remote = require('electron').remote;
+    document.addEventListener("keydown", function (e) {
+      if (e.which === 123) {
+        remote.getCurrentWindow().toggleDevTools();
+      } else if (e.which === 116) {
+        location.reload();
+      }
+    });
   </script>
 </body>
+
 </html>

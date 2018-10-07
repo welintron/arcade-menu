@@ -73,7 +73,7 @@ app.on('ready', function () {
 
   
   // Create the browser window.
-  mainWindow = new BrowserWindow({ width: 720, height: 520, show: false, icon: './resources/app/mklogo.png', backgroundColor: '#000000'});
+  mainWindow = new BrowserWindow({ width: 512, height: 552, show: false, icon: './resources/app/mklogo.png', backgroundColor: '#000000'});
   mainWindow.setFullScreen(false);
   mainWindow.setMenu(null);
   // and load the index.html of the app.

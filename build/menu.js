@@ -357,7 +357,7 @@ $(document).ready(function ($) {
       $("#cancel").transition({ 'visibility': (menu == 'default' ? 'visible' : 'hidden') , easing: 'ease', duration: 500 });
 
       if (menu == 'snes') {
-        $('.bottomText').css({ "top" : "402px"});
+        $('.bottomText').css({ "top" : "405px"});
         $('.countdown').css({ "top" : "402px"});
         $('.progressContent').css({ "top" : "405px"});
       } else{
@@ -414,9 +414,9 @@ $(document).ready(function ($) {
       switch (name) {
         case 'toastypyke':
           $('#toastypyke').transition({
-            x: '-100px'
+            x: '-150px'
           }).transition({
-            x: '100px',
+            x: '150px',
             duration: 800,
             delay: 300
           });
@@ -460,6 +460,58 @@ $(document).ready(function ($) {
 
  }
 
+
+ function startCharAnimationsTest(name) {
+  const sound = new Howl({
+    src: ['./build/wav/liukang.wav']
+  });
+    sound.play(); 
+
+    $(`#${name}`).show();
+    switch (name) {
+      case 'toastypyke':
+        $('#toastypyke').transition({
+          x: '-150px'
+        }).transition({
+          x: '150px',
+          duration: 800,
+          delay: 300
+        });
+        break;
+     case 'liukang':
+        $('#liukang').transition({
+          x: '-1000px', duration: 1300, easing: 'linear'
+        });
+        break;
+    case 'raiden':
+        $('#raiden').transition({
+          x: '800px', duration: 1000, easing: 'linear'
+        });
+        break;
+    default:
+        $(`#${name}`).transition({
+          x: '-150px'
+        }).transition({
+          x: '150px',
+          duration: 800,
+          delay: 300
+        });     
+    }
+
+    delay(function () {
+      delay(function () {
+        if (name == 'raiden')  {
+          $(`#${name}`).css({ "left" : "-300px", "transform" : "" });
+        } else if (name == 'liukang') {
+          $(`#${name}`).css({ "left" : "720px", "transform" : "" });
+        }
+        
+        document.addEventListener('keydown', keyDown, false);
+      }, 1000);
+    }, 300);
+  
+
+}
 
 
  function animateSelected() {
@@ -725,6 +777,7 @@ function animateShaoKahn() {
 
 
   function keyDown(e) {
+   // startCharAnimationsTest('raidenpyke');
     if (e.repeat) { return }
     if (shutdown) {
       cancelShutDown(e);  
@@ -897,7 +950,7 @@ function animateShaoKahn() {
     if(menu == 'snes'){    
     $("body").addClass("menuSnes");  	
     $("#element2").addClass("bordaPiscante");
-    $(".bordaPiscante").css({'width': '292px'}); 
+    $(".bordaPiscante").css({'width': '210px'}); 
       animateDivers();
 	    music.play();
       delay(function () {
@@ -905,10 +958,10 @@ function animateShaoKahn() {
       }, 500);
     } else {
       document.removeEventListener('keydown', keyDown, false);
-      $("#element1").css({'left': '73px'}); 
-      $("#element2").css({'left': '73px'});
-      $("#element3").css({'left': '399px'}); 
-      $("#element4").css({'left': '399px'});        
+      $("#element1").css({'left': '54px'}); 
+      $("#element2").css({'left': '54px'});
+      $("#element3").css({'left': '286px'}); 
+      $("#element4").css({'left': '286px'});        
       $('#portalRight').show();
       $('#portalLeft').show();
       $('#portalRight').transition({x: '-381px', duration: 1300, delay: 1800, easing: 'linear'})
@@ -938,6 +991,7 @@ function animateShaoKahn() {
                 document.addEventListener('keydown', keyDown, false); 
                 delay(function () {
                   musicGates.play();
+                  
                 }, 2000);
               }, 500);
         }, 1300);

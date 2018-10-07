@@ -414,9 +414,9 @@ $(document).ready(function ($) {
       switch (name) {
         case 'toastypyke':
           $('#toastypyke').transition({
-            x: '-150px'
+            x: '-140px'
           }).transition({
-            x: '150px',
+            x: '140px',
             duration: 800,
             delay: 300
           });
@@ -428,14 +428,14 @@ $(document).ready(function ($) {
           break;
       case 'raiden':
           $('#raiden').transition({
-            x: '1030px', duration: 1000, easing: 'linear'
+            x: '950px', duration: 1000, easing: 'linear'
           });
           break;
       default:
           $(`#${name}`).transition({
-            x: '-150px'
+            x: '-140px'
           }).transition({
-            x: '150px',
+            x: '140px',
             duration: 800,
             delay: 300
           });     
@@ -447,9 +447,9 @@ $(document).ready(function ($) {
           $(`#${name}`).hide();
 
           if (name == 'raiden')  {
-            $(`#${name}`).css({ "left" : "-300px", "transform" : "" });
+            $(`#${name}`).css({ "left" : "-218px", "transform" : "" });
           } else if (name == 'liukang') {
-            $(`#${name}`).css({ "left" : "720px", "transform" : "" });
+            $(`#${name}`).css({ "left" : "512px", "transform" : "" });
           }
           
           checkSelection(); 
@@ -463,7 +463,7 @@ $(document).ready(function ($) {
 
  function startCharAnimationsTest(name) {
   const sound = new Howl({
-    src: ['./build/wav/liukang.wav']
+    src: ['./build/wav/0toasty2.mp3']
   });
     sound.play(); 
 
@@ -471,9 +471,9 @@ $(document).ready(function ($) {
     switch (name) {
       case 'toastypyke':
         $('#toastypyke').transition({
-          x: '-150px'
+          x: '-140px'
         }).transition({
-          x: '150px',
+          x: '140px',
           duration: 800,
           delay: 300
         });
@@ -485,14 +485,14 @@ $(document).ready(function ($) {
         break;
     case 'raiden':
         $('#raiden').transition({
-          x: '800px', duration: 1000, easing: 'linear'
+          x: '950px', duration: 1000, easing: 'linear'
         });
         break;
     default:
         $(`#${name}`).transition({
-          x: '-150px'
+          x: '-140px'
         }).transition({
-          x: '150px',
+          x: '140px',
           duration: 800,
           delay: 300
         });     
@@ -777,7 +777,7 @@ function animateShaoKahn() {
 
 
   function keyDown(e) {
-   // startCharAnimationsTest('raidenpyke');
+   // startCharAnimationsTest('toastypyke');
     if (e.repeat) { return }
     if (shutdown) {
       cancelShutDown(e);  

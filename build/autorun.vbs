@@ -47,7 +47,7 @@ Shell.Run Command_8, 1, True 'Load Hyperspin
 
 objRandomNumber = objRandom.Next_2(1, 100)
 'Encerra video aleatóriamente
-If (objRandomNumber < 80) Then
+If (objRandomNumber <= 50) Then
 	Set Query2 = Processes.ExecQuery ("Select * from Win32_Process Where Name = ""vlc.exe""")
 	If Query2.Count > 0 Then 
 		For Each Inst2 In Query2 

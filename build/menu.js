@@ -238,21 +238,26 @@ $(document).ready(function ($) {
   }
 
 
-    function runVlcScript() {
+    function runVlcScript(sound) {
     
       const {
         spawn
       } = require('child_process');
+
+      const script = sound ? 'c:/Arcade/Startup/vlc.vbs' : 'c:/Arcade/Startup/vlcNoSound.vbs';
   
-      const child = spawn('cscript.exe', ['c:/Arcade/Startup/vlc.vbs'], {
+      const child = spawn('cscript.exe', [script], {
         detached: false,
         stdio: 'ignore'
       });
 
 
       delay(function () {
+        $("#element2").addClass("bordaPiscante");
+        animateDivers();
         remote.getCurrentWindow().focus();
-      }, 1000);
+        document.addEventListener('keydown', keyDown, false);
+      }, 500);
 
 
     }
@@ -265,8 +270,11 @@ $(document).ready(function ($) {
     find('name', 'vlc.exe')
       .then(function (list) {
         if (list.length == 0) {
-          runVlcScript();
+          runVlcScript(true);
         } else {
+          $("#element2").addClass("bordaPiscante");
+          animateDivers();
+          document.addEventListener('keydown', keyDown, false);
           musicGates.play();
         }
       });
@@ -467,7 +475,9 @@ $(document).ready(function ($) {
 
 
   function goHyperspin() {
+    findKillVlcProcess();
     delay(function () {
+      runVlcScript(false);
       abreHyperspin();
       delay(function () {
         remote.getCurrentWindow().close();
@@ -1267,9 +1277,6 @@ $(document).ready(function ($) {
         delay(function () {
           delay(function () {
             choose.play();
-            $("#element2").addClass("bordaPiscante");
-            animateDivers();
-            document.addEventListener('keydown', keyDown, false);
             delay(function () {
               // musicGates.play();
               playMenuMusic();

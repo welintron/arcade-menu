@@ -238,31 +238,22 @@ $(document).ready(function ($) {
   }
 
 
-    function runVlcScript(sound) {
-    
-      const {
-        spawn
-      } = require('child_process');
+  function runVlcScript(sound) {
 
-      const script = sound ? 'c:/Arcade/Startup/vlc.vbs' : 'c:/Arcade/Startup/vlcNoSound.vbs';
-  
-      const child = spawn('cscript.exe', [script], {
-        detached: false,
-        stdio: 'ignore'
-      });
+    const {
+      spawn
+    } = require('child_process');
 
+    const script = sound ? 'c:/Arcade/Startup/vlc.vbs' : 'c:/Arcade/Startup/vlcNoSound.vbs';
 
-      delay(function () {
-        $("#element2").addClass("bordaPiscante");
-        animateDivers();
-        remote.getCurrentWindow().focus();
-        document.addEventListener('keydown', keyDown, false);
-      }, 500);
+    const child = spawn('cscript.exe', [script], {
+      detached: false,
+      stdio: 'ignore'
+    });
+
+  }
 
 
-    }
-
-  
 
 
   function playMenuMusic() {
@@ -270,12 +261,42 @@ $(document).ready(function ($) {
     find('name', 'vlc.exe')
       .then(function (list) {
         if (list.length == 0) {
-          runVlcScript(true);
+          delay(function () {
+            gates.play();
+            runVlcScript(true);
+            delay(function () {
+              remote.getCurrentWindow().focus();
+              delay(function () {
+                delay(function () {
+                  choose.play();
+                  $("#element2").addClass("bordaPiscante");
+                  animateDivers();
+                  document.addEventListener('keydown', keyDown, false);
+                }, 500);
+              }, 1300);
+            }, 500);
+
+          }, 1600);
+
         } else {
-          $("#element2").addClass("bordaPiscante");
-          animateDivers();
-          document.addEventListener('keydown', keyDown, false);
-          musicGates.play();
+          delay(function () {
+            gates.play();
+            runVlcScript(true);
+            delay(function () {
+              remote.getCurrentWindow().focus();
+              delay(function () {
+                delay(function () {
+                  choose.play();
+                  $("#element2").addClass("bordaPiscante");
+                  animateDivers();
+                  document.addEventListener('keydown', keyDown, false);
+                  delay(function () {
+                    musicGates.play();
+                  }, 2000);
+                }, 500);
+              }, 1300);
+            }, 500);
+          }, 1600);
         }
       });
 
@@ -1272,18 +1293,8 @@ $(document).ready(function ($) {
           y: '0px',
           duration: 50
         });
-      delay(function () {
-        gates.play();
-        delay(function () {
-          delay(function () {
-            choose.play();
-            delay(function () {
-              // musicGates.play();
-              playMenuMusic();
-            }, 2000);
-          }, 500);
-        }, 1300);
-      }, 1800);
+
+        playMenuMusic();
     }
 
   }

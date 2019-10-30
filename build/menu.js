@@ -281,7 +281,6 @@ $(document).ready(function ($) {
         } else {
           delay(function () {
             gates.play();
-            runVlcScript(true);
             delay(function () {
               remote.getCurrentWindow().focus();
               delay(function () {
